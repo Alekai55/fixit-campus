@@ -9,9 +9,11 @@ import java.util.logging.SimpleFormatter;
 
 public class Main{
     private static Logger logger = Logger.getLogger("Mi Log");
-    private static SimpleFormatter simpleFormatter =  new SimpleFormatter();
 
     public static void main(String[] args) throws IOException {
+
+        System.setProperty("java.util.logging.SimpleFormatter.format", "%1$tF [%4$s] - %5$s%6$s%n"); //modifacamos el formato del sistema para texo más legible
+
         //Ruta relativa para crear la carpeta que contiene el archivo logs
         String rutaCarpetaLog = "archivos-log";
         //Nombre archivo para los logs
@@ -28,9 +30,11 @@ public class Main{
         logger.setLevel(Level.ALL); //el logger coge todos los niveles
         fh.setLevel(Level.ALL); //el handler en su filtro, coge todos los niveles
         logger.setUseParentHandlers(false); // No se muestra por pantalla
-        System.setProperty("java.util.logging.SimpleFormatter.format", "%1$tF [%4$s] - %5$s%6$s%n"); //texo más legible
+
+
+
         logger.addHandler(fh);
-        fh.setFormatter(simpleFormatter);
+        fh.setFormatter(new SimpleFormatter()); //le pasamos al handler el formato legible
 
         //Hilo creacion anónima, con una pausa al terminar, para que el hilo3 lo captura en espera
         Thread hilo1 = new Thread(new Runnable() {
