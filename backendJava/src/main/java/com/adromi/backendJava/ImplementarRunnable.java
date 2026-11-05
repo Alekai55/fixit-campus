@@ -14,3 +14,4 @@ public class ImplementarRunnable implements Runnable {
         logger.info(Thread.currentThread().getName() + " ha sido creado  y se encuentra en estado " + Thread.currentThread().getState() + "\n---------------------------------------------------------------");
     }
 }
+//Prueba github
