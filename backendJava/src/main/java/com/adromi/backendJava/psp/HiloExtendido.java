@@ -1,4 +1,4 @@
-package com.adromi.backendJava;
+package com.adromi.backendJava.psp;
 
 import java.util.logging.Logger;
 
