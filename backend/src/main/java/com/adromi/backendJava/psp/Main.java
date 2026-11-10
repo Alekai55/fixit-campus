@@ -15,7 +15,7 @@ public class Main{
         System.setProperty("java.util.logging.SimpleFormatter.format", "%1$tF [%4$s] - %5$s%6$s%n"); //modifacamos el formato del sistema para texo más legible
 
         //Ruta relativa para crear la carpeta que contiene el archivo logs
-        String rutaCarpetaLog = "archivos-log";
+        String rutaCarpetaLog = "backend/archivos_creados/archivos-log";
         //Nombre archivo para los logs
         String rutaArchivoLog = rutaCarpetaLog + "/archivo.log";
 
