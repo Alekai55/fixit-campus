@@ -45,7 +45,7 @@ public class Main {
                         3)));
 
         //Creamos el libro de excel
-        try (XSSFWorkbook libro = new XSSFWorkbook(); FileOutputStream archivo_excel = new FileOutputStream("C:\\Users\\Pc\\Documents\\2ºDAM\\Proyectos\\Global 1er Trimestre\\backend\\backendJava\\archivos_creados\\excel_BDD.xlsx")) {
+        try (XSSFWorkbook libro = new XSSFWorkbook(); FileOutputStream archivo_excel = new FileOutputStream("backend/archivos_creados/excel_BDD.xlsx")) {
 
             //Creamos una hoja en excel
             Sheet hoja = libro.createSheet("Incidencias");
