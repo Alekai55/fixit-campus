@@ -1,0 +1,163 @@
+# ==============================================================================
+# GitIgnore Unificado - Proyecto FIXiT Campus
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# 1. Archivos del Sistema Operativo
+# ------------------------------------------------------------------------------
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# ------------------------------------------------------------------------------
+# 2. IDEs y Editores de Código (IntelliJ, Android Studio, VS Code, Eclipse, etc.)
+# ------------------------------------------------------------------------------
+# IntelliJ IDEA / Android Studio
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# Visual Studio Code
+.vscode/
+
+# Eclipse
+.apt_generated/
+.classpath
+.factorypath
+.project
+.settings/
+.springBeans
+.sts4-cache/
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# ------------------------------------------------------------------------------
+# 3. Python (analytics)
+# ------------------------------------------------------------------------------
+# Entornos virtuales
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Byte-code / compilados
+__pycache__/
+*.py[codz]
+*$py.class
+*.so
+.Python
+
+# Distribución y empaquetado
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Logs y pruebas
+pip-log.txt
+pip-delete-this-directory.txt
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py.cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# Tipado y linters
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.pytype/
+.ruff_cache/
+
+# Variables de entorno locales
+.env
+.envrc
+
+# Jupyter / Varios
+.ipynb_checkpoints
+tempCodeRunnerFile.py
+
+# ------------------------------------------------------------------------------
+# 4. Android (android-app)
+# ------------------------------------------------------------------------------
+# Gradle y compilación
+.gradle/
+**/build/
+.kotlin/
+captures/
+.externalNativeBuild/
+.cxx/
+output-metadata.json
+
+# Archivos de configuración local (rutas del SDK local del desarrollador)
+local.properties
+
+# Paquetes y ejecutables generados
+*.apk
+*.aab
+
+# Firmas y certificados (seguridad)
+*.jks
+*.keystore
+
+# Servicios de Google / Firebase locales
+google-services.json
+
+# Profiling
+*.hprof
+
+# ------------------------------------------------------------------------------
+# 5. Java / Backend (backend)
+# ------------------------------------------------------------------------------
+# Maven
+target/
+**/target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+# Logs generados por la aplicación
+*.log
+archivos-log/
+**/archivos-log/
+
+# Archivos y carpetas generados específicamente por la lógica de Backend Java
+archivos_creados/
+**/archivos_creados/
+
