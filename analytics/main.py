@@ -19,5 +19,5 @@ plt.tight_layout()
 # plt.show()
 buf = io.BytesIO()
 plt.savefig(buf, format="png")
-with open("grafico_incidencias.png", "wb") as f:
+with open("analytics/graficos/grafico_incidencias.png", "wb") as f:
     f.write(buf.getbuffer())
