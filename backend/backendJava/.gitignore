@@ -42,4 +42,4 @@ build/
 ### Mac OS ###
 .DS_Store
 
-backend\backendJava\archivos_creados
+backend/backendJava/archivos_creados/
