@@ -1,2 +1,1 @@
-# fixit-campus
-Repositorio completo del proyecto 
+#Fixit Campus - Proyecto
