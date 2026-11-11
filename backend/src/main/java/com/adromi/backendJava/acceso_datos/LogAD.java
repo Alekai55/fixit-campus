@@ -15,7 +15,7 @@ public class LogAD {
 
     } //Constructor vacio
 
-    public static Logger getLogger(String sistemaLogsAccesoADatos) {
+    public static Logger getLogger() {
         return logger;
     }
 

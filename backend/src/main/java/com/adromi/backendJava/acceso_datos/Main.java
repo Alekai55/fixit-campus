@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.logging.*;
 
 public class Main {
-    static Logger logger = LogAD.getLogger("Sistema Logs Acceso a Datos");
+    static Logger logger = LogAD.getLogger();
     static int incidencias_correctas = 0;
     static int incidencias_incorrectas = 0;
 
