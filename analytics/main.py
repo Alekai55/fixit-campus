@@ -1,8 +1,10 @@
-import matplotlib.pyplot as plt
-import io
+"""Módulo principal que realiza la carga de datos, el filtrado si es necesario y la generación de gráficas."""
+
+from pathlib import Path
+
 import cargardatos
 import filtro
-from pathlib import Path
+import graficos
 
 ruta = Path("analytics/graficos")
 ruta.mkdir(parents=True, exist_ok=True)
@@ -10,18 +12,5 @@ ruta.mkdir(parents=True, exist_ok=True)
 datos = cargardatos.cargardatos()
 incidencias_filtradas = filtro.filtrar(datos)
 
-x = [incidencia["espacio"] for incidencia in incidencias_filtradas]
-y = [x.count(espacio) for espacio in x]
-
-plt.bar(x, y)
-plt.yticks(range(0, max(y) + 1))
-plt.xlabel("Espacios de la escuela")
-plt.ylabel("Número de incidencias")
-plt.title("Incidencias ABIERTA por espacio")
-plt.xticks(rotation=45)
-plt.tight_layout()
-# plt.show()
-buf = io.BytesIO()
-plt.savefig(buf, format="png")
-with open("analytics/graficos/grafico_incidencias.png", "wb") as f:
-    f.write(buf.getbuffer())
+graficos.grafica_incidencias_por_espacio(incidencias_filtradas)
+graficos.grafica_media_resolucion(datos)

@@ -1,7 +1,10 @@
+"""Módulo para cargar los datos de incidencias en formato JSON."""
+
 import json
 
 
 def cargardatos():
+    """Devuelve la lista de incidencias cargadas desde el JSON."""
     datos_json = (
         '[\n'
         '    {\n'
@@ -160,7 +163,7 @@ def cargardatos():
         '        "estado": "RESUELTA",\n'
         '        "fecha_creacion": "2026-10-25",\n'
         '        "fecha_objetivo": "2026-10-25",\n'
-        '        "fecha_resolucion": "2026-10-25",\n'
+        '        "fecha_resolucion": "2026-10-27",\n'
         '        "coste_estimado": 310.0,\n'
         '        "espacio": "Entrada Principal",\n'
         '        "categoria": "Cerrajería",\n'
@@ -271,7 +274,7 @@ def cargardatos():
         '        "fecha_resolucion": "2026-11-02",\n'
         '        "coste_estimado": 0.0,\n'
         '        "espacio": "Rack Servidores (Ala Este)",\n'
-        '        "categoria": "Redes",\n'
+        '        "categoria": "Informática",\n'
         '        "usuario_reporta": "Marta López",\n'
         '        "tecnico": "Lucía (Soporte IT)",\n'
         '        "proveedor": "Telefónica"\n'
@@ -365,6 +368,24 @@ def cargardatos():
         '        "usuario_reporta": "David Casas",\n'
         '        "tecnico": "Antonio (Mantenimiento)",\n'
         '        "proveedor": "Schneider"\n'
+        '    },\n'
+        '    {\n'
+        '        "id": 21,\n'
+        '        "titulo": "Equipo del laboratorio sin arrancar",\n'
+        '        "descripcion": "Tres equipos del Laboratorio de '
+        'Informática no arrancan tras una actualización del SO.",\n'
+        '        "foto_url": "fotos/pc_laboratorio.jpg",\n'
+        '        "prioridad": "Alta",\n'
+        '        "estado": "RESUELTA",\n'
+        '        "fecha_creacion": "2026-11-03",\n'
+        '        "fecha_objetivo": "2026-11-04",\n'
+        '        "fecha_resolucion": "2026-11-04",\n'
+        '        "coste_estimado": 0.0,\n'
+        '        "espacio": "Laboratorio Informática",\n'
+        '        "categoria": "Informática",\n'
+        '        "usuario_reporta": "Luis Martínez",\n'
+        '        "tecnico": "Lucía (Soporte IT)",\n'
+        '        "proveedor": "null"\n'
         '    }\n'
         ']'
     )
