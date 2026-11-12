@@ -1,371 +1,371 @@
-def cargardatos():
-    datos_json = [
-        {
-            "id": 1,
-            "titulo": "Rotura en la planta del ascensor",
-            "descripcion": (
-                "Avería mecánica en el ascensor principal al llegar "
-                "a la Planta 0 del Ágora."
-            ),
-            "foto_url": "fotos/ascensor_planta.jpg",
-            "prioridad": "Urgente",
-            "estado": "EN_CURSO",
-            "fecha_creacion": "2026-11-05",
-            "fecha_objetivo": "2026-11-05",
-            "fecha_resolucion": "null",
-            "coste_estimado": 1200.5,
-            "espacio": "Planta 0 Ágora",
-            "categoria": "Mecánica y Elevación",
-            "usuario_reporta": "Carlos Gómez",
-            "tecnico": "null",
-            "proveedor": "Schindler"
-        },
-        {
-            "id": 2,
-            "titulo": "Pantalla de una clase de la cuarta planta fundida",
-            "descripcion": (
-                "La pantalla interactiva Samsung del Aula 401 no enciende tras"
-                "subida de tensión."
-            ),
-            "foto_url": "fotos/pantalla_planta4.jpg",
-            "prioridad": "Alta",
-            "estado": "ABIERTA",
-            "fecha_creacion": "2026-11-05",
-            "fecha_objetivo": "2026-11-06",
-            "fecha_resolucion": "null",
-            "coste_estimado": 850,
-            "espacio": "Aula 401",
-            "categoria": "Audiovisuales",
-            "usuario_reporta": "Marta López",
-            "tecnico": "null",
-            "proveedor": "Samsung"
-        },
-        {
-            "id": 3,
-            "titulo": "Fusible central fundido",
-            "descripcion": (
-                "Sin suministro en el cuadro principal que alimenta "
-                "la sala del Departamento Tech."
-            ),
-            "foto_url": "fotos/cuadro_electrico.jpg",
-            "prioridad": "Urgente",
-            "estado": "EN_CURSO",
-            "fecha_creacion": "2026-11-05",
-            "fecha_objetivo": "2026-11-05",
-            "fecha_resolucion": "null",
-            "coste_estimado": 340,
-            "espacio": "Departamento Tech",
-            "categoria": "Electricidad",
-            "usuario_reporta": "Luis Martínez",
-            "tecnico": "null",
-            "proveedor": "Schneider"
-        },
-        {
-            "id": 4,
-            "titulo": "Monitor de recepción no se conecta el hdmi",
-            "descripcion": "El monitor de información de recepción no reconoce"
-            "la señal del puerto HDMI.",
-            "foto_url": "fotos/hdmi_recepcion.jpg",
-            "prioridad": "Media",
-            "estado": "ABIERTA",
-            "fecha_creacion": "2026-11-05",
-            "fecha_objetivo": "2026-11-08",
-            "fecha_resolucion": "null",
-            "coste_estimado": 45,
-            "espacio": "Recepción",
-            "categoria": "Audiovisuales",
-            "usuario_reporta": "Elena Ruiz",
-            "tecnico": "Lucía (Soporte IT)",
-            "proveedor": "Samsung"
-        },
-        {
-            "id": 5,
-            "titulo": "Microondas del office echa chispas",
-            "descripcion": "El microondas del comedor de profesores no"
-            "calienta y hace ruido de cortocircuito.",
-            "foto_url": "fotos/microondas_office.jpg",
-            "prioridad": "Baja",
-            "estado": "RESUELTA",
-            "fecha_creacion": "2026-11-05",
-            "fecha_objetivo": "2026-11-15",
-            "fecha_resolucion": "2026-11-06",
-            "coste_estimado": 150,
-            "espacio": "Office Profesores",
-            "categoria": "Electrodomésticos",
-            "usuario_reporta": "Marta López",
-            "tecnico": "Antonio (Mantenimiento)",
-            "proveedor": "Electro Reparaciones"
-        },
-        {
-            "id": 6,
-            "titulo": "Fuga de agua en lavabo",
-            "descripcion": "Goteo constante en el grifo del baño de la primera"
-            "planta.",
-            "foto_url": "fotos/fuga_agua1.jpg",
-            "prioridad": "Media",
-            "estado": "ABIERTA",
-            "fecha_creacion": "2026-10-28",
-            "fecha_objetivo": "2026-10-30",
-            "fecha_resolucion": "2026-10-29",
-            "coste_estimado": 65,
-            "espacio": "Baño Planta 1",
-            "categoria": "Fontanería",
-            "usuario_reporta": "Pedro Sánchez",
-            "tecnico": "José (Fontanero Interno)",
-            "proveedor": "Fontanería Paco"
-        },
-        {
-            "id": 7,
-            "titulo": "Silla de oficina rota",
-            "descripcion": "Una de las ruedas de la silla del despacho 12 se"
-            "ha desprendido.",
-            "foto_url": "fotos/silla_rota.jpg",
-            "prioridad": "Baja",
-            "estado": "ABIERTA",
-            "fecha_creacion": "2026-11-03",
-            "fecha_objetivo": "2026-11-10",
-            "fecha_resolucion": "null",
-            "coste_estimado": 25,
-            "espacio": "Despacho 12",
-            "categoria": "Mobiliario",
-            "usuario_reporta": "Ana Silva",
-            "tecnico": "null",
-            "proveedor": "Ofita S.A."
-        },
-        {
-            "id": 8,
-            "titulo": "Aire acondicionado no enfría",
-            "descripcion": "El split de la sala de reuniones hace ruido pero"
-            "no baja la temperatura.",
-            "foto_url": "fotos/aire_acondicionado.jpg",
-            "prioridad": "Alta",
-            "estado": "ABIERTA",
-            "fecha_creacion": "2026-11-04",
-            "fecha_objetivo": "2026-11-06",
-            "fecha_resolucion": "null",
-            "coste_estimado": 180,
-            "espacio": "Sala de Reuniones B",
-            "categoria": "Climatización",
-            "usuario_reporta": "Jorge Noguera",
-            "tecnico": "Antonio (Mantenimiento)",
-            "proveedor": "ClimaTech"
-        },
-        {
-            "id": 9,
-            "titulo": "Puerta de entrada atascada",
-            "descripcion": "La cerradura electrónica de la entrada principal"
-            "no lee las tarjetas.",
-            "foto_url": "fotos/cerradura.jpg",
-            "prioridad": "Urgente",
-            "estado": "RESUELTA",
-            "fecha_creacion": "2026-10-25",
-            "fecha_objetivo": "2026-10-25",
-            "fecha_resolucion": "2026-10-25",
-            "coste_estimado": 310,
-            "espacio": "Entrada Principal",
-            "categoria": "Cerrajería",
-            "usuario_reporta": "Elena Ruiz",
-            "tecnico": "null",
-            "proveedor": "Cerrajeros 24h Express"
-        },
-        {
-            "id": 10,
-            "titulo": "Proyector con imagen borrosa",
-            "descripcion": "El proyector del aula magna necesita un cambio de"
-            "lámpara o ajuste de lente.",
-            "foto_url": "fotos/proyector.jpg",
-            "prioridad": "Media",
-            "estado": "ABIERTA",
-            "fecha_creacion": "2026-11-02",
-            "fecha_objetivo": "2026-11-07",
-            "fecha_resolucion": "null",
-            "coste_estimado": 120,
-            "espacio": "Aula Magna",
-            "categoria": "Audiovisuales",
-            "usuario_reporta": "Laura Marín",
-            "tecnico": "Lucía (Soporte IT)",
-            "proveedor": "Samsung"
-        },
-        {
-            "id": 11,
-            "titulo": "Humedad en pared norte",
-            "descripcion": "Mancha de humedad creciendo en la pared norte de"
-            "la biblioteca.",
-            "foto_url": "fotos/humedad_biblio.jpg",
-            "prioridad": "Alta",
-            "estado": "ABIERTA",
-            "fecha_creacion": "2026-10-20",
-            "fecha_objetivo": "2026-10-30",
-            "fecha_resolucion": "null",
-            "coste_estimado": 450,
-            "espacio": "Biblioteca",
-            "categoria": "Infraestructura",
-            "usuario_reporta": "David Casas",
-            "tecnico": "null",
-            "proveedor": "Reformas Integrales S.L."
-        },
-        {
-            "id": 12,
-            "titulo": "Lámpara parpadea",
-            "descripcion": "Fluorescente del pasillo de la segunda planta"
-            "parpadea constantemente.",
-            "foto_url": "fotos/lampara_parpadea.jpg",
-            "prioridad": "Baja",
-            "estado": "ABIERTA",
-            "fecha_creacion": "2026-11-01",
-            "fecha_objetivo": "2026-11-05",
-            "fecha_resolucion": "2026-11-03",
-            "coste_estimado": 15,
-            "espacio": "Pasillo Planta 2",
-            "categoria": "Electricidad",
-            "usuario_reporta": "Luis Martínez",
-            "tecnico": "Antonio (Mantenimiento)",
-            "proveedor": "Schneider"
-        },
-        {
-            "id": 13,
-            "titulo": "Mesa de reuniones tambalea",
-            "descripcion": "A la mesa principal de la sala de juntas le falta"
-            "un taco nivelador.",
-            "foto_url": "fotos/mesa_tambalea.jpg",
-            "prioridad": "Baja",
-            "estado": "ABIERTA",
-            "fecha_creacion": "2026-11-04",
-            "fecha_objetivo": "2026-11-12",
-            "fecha_resolucion": "null",
-            "coste_estimado": 5,
-            "espacio": "Sala de Juntas",
-            "categoria": "Mobiliario",
-            "usuario_reporta": "Marta López",
-            "tecnico": "José (Mantenimiento)",
-            "proveedor": "Ofita S.A."
-        },
-        {
-            "id": 14,
-            "titulo": "Inodoro pierde agua por la base",
-            "descripcion": "Fuga de agua limpia en la base del inodoro del"
-            "baño de minusválidos.",
-            "foto_url": "fotos/inodoro_fuga.jpg",
-            "prioridad": "Alta",
-            "estado": "EN_CURSO",
-            "fecha_creacion": "2026-11-05",
-            "fecha_objetivo": "2026-11-06",
-            "fecha_resolucion": "null",
-            "coste_estimado": 90,
-            "espacio": "Baño Minusválidos (Planta 0)",
-            "categoria": "Fontanería",
-            "usuario_reporta": "Pedro Sánchez",
-            "tecnico": "José (Fontanero Interno)",
-            "proveedor": "Fontanería Paco"
-        },
-        {
-            "id": 15,
-            "titulo": "Router principal sin conexión",
-            "descripcion": "Caída masiva de red wifi en el ala este del"
-            "edificio.",
-            "foto_url": "fotos/router_wifi.jpg",
-            "prioridad": "Urgente",
-            "estado": "RESUELTA",
-            "fecha_creacion": "2026-11-02",
-            "fecha_objetivo": "2026-11-02",
-            "fecha_resolucion": "2026-11-02",
-            "coste_estimado": 0,
-            "espacio": "Rack Servidores (Ala Este)",
-            "categoria": "Redes",
-            "usuario_reporta": "Marta López",
-            "tecnico": "Lucía (Soporte IT)",
-            "proveedor": "Telefónica"
-        },
-        {
-            "id": 16,
-            "titulo": "Ventana exterior no cierra",
-            "descripcion": "La bisagra de la ventana del aula 202 está trabada"
-            "y entra frío.",
-            "foto_url": "fotos/ventana_traba.jpg",
-            "prioridad": "Media",
-            "estado": "ABIERTA",
-            "fecha_creacion": "2026-11-05",
-            "fecha_objetivo": "2026-11-09",
-            "fecha_resolucion": "null",
-            "coste_estimado": 55,
-            "espacio": "Aula 202",
-            "categoria": "Infraestructura",
-            "usuario_reporta": "Laura Marín",
-            "tecnico": "null",
-            "proveedor": "Aluminios Gómez"
-        },
-        {
-            "id": 17,
-            "titulo": "Pizarra blanca descolgada",
-            "descripcion": "Uno de los anclajes de la pared ha cedido en el"
-            "aula 105.",
-            "foto_url": "fotos/pizarra.jpg",
-            "prioridad": "Media",
-            "estado": "RESUELTA",
-            "fecha_creacion": "2026-10-31",
-            "fecha_objetivo": "2026-11-03",
-            "fecha_resolucion": "2026-11-01",
-            "coste_estimado": 20,
-            "espacio": "Aula 105",
-            "categoria": "Mobiliario",
-            "usuario_reporta": "Ana Silva",
-            "tecnico": "Antonio (Mantenimiento)",
-            "proveedor": "Ofita S.A."
-        },
-        {
-            "id": 18,
-            "titulo": "Cristal de puerta roto",
-            "descripcion": "Impacto accidental ha rajado el cristal de la"
-            "puerta del comedor.",
-            "foto_url": "fotos/cristal_roto.jpg",
-            "prioridad": "Urgente",
-            "estado": "EN_CURSO",
-            "fecha_creacion": "2026-11-05",
-            "fecha_objetivo": "2026-11-06",
-            "fecha_resolucion": "null",
-            "coste_estimado": 220,
-            "espacio": "Comedor Principal",
-            "categoria": "Cristalería",
-            "usuario_reporta": "Elena Ruiz",
-            "tecnico": "null",
-            "proveedor": "Cristalerías Rápidas 24h"
-        },
-        {
-            "id": 19,
-            "titulo": "Filtro de fuente de agua atascado",
-            "descripcion": "La fuente del pasillo tira muy poca agua al pulsar"
-            "el botón.",
-            "foto_url": "fotos/fuente_agua.jpg",
-            "prioridad": "Baja",
-            "estado": "ABIERTA",
-            "fecha_creacion": "2026-11-01",
-            "fecha_objetivo": "2026-11-10",
-            "fecha_resolucion": "null",
-            "coste_estimado": 35,
-            "espacio": "Pasillo Planta 2",
-            "categoria": "Fontanería",
-            "usuario_reporta": "Jorge Noguera",
-            "tecnico": "null",
-            "proveedor": "Fuentes y Dispensadores S.A."
-        },
-        {
-            "id": 20,
-            "titulo": "Enchufe quemado",
-            "descripcion": "Marcas negras alrededor del enchufe del"
-            "laboratorio B.",
-            "foto_url": "fotos/enchufe_quemado.jpg",
-            "prioridad": "Alta",
-            "estado": "RESUELTA",
-            "fecha_creacion": "2026-10-29",
-            "fecha_objetivo": "2026-10-31",
-            "fecha_resolucion": "2026-10-30",
-            "coste_estimado": 40,
-            "espacio": "Laboratorio B",
-            "categoria": "Electricidad",
-            "usuario_reporta": "David Casas",
-            "tecnico": "Antonio (Mantenimiento)",
-            "proveedor": "Schneider"
-        }
-    ]
+import json
 
-    return datos_json
+
+def cargardatos():
+    datos_json = (
+        '[\n'
+        '    {\n'
+        '        "id": 1,\n'
+        '        "titulo": "Rotura en la planta del ascensor",\n'
+        '        "descripcion": "Avería mecánica en el ascensor '
+        'principal al llegar a la Planta 0 del Ágora.",\n'
+        '        "foto_url": "fotos/ascensor_planta.jpg",\n'
+        '        "prioridad": "Urgente",\n'
+        '        "estado": "EN_CURSO",\n'
+        '        "fecha_creacion": "2026-11-05",\n'
+        '        "fecha_objetivo": "2026-11-05",\n'
+        '        "fecha_resolucion": "null",\n'
+        '        "coste_estimado": 1200.5,\n'
+        '        "espacio": "Planta 0 Ágora",\n'
+        '        "categoria": "Mecánica y Elevación",\n'
+        '        "usuario_reporta": "Carlos Gómez",\n'
+        '        "tecnico": "null",\n'
+        '        "proveedor": "Schindler"\n'
+        '    },\n'
+        '    {\n'
+        '        "id": 2,\n'
+        '        "titulo": "Pantalla de una clase de la cuarta '
+        'planta fundida",\n'
+        '        "descripcion": "La pantalla interactiva Samsung '
+        'del Aula 401 no enciende tras subida de tensión.",\n'
+        '        "foto_url": "fotos/pantalla_planta4.jpg",\n'
+        '        "prioridad": "Alta",\n'
+        '        "estado": "ABIERTA",\n'
+        '        "fecha_creacion": "2026-11-05",\n'
+        '        "fecha_objetivo": "2026-11-06",\n'
+        '        "fecha_resolucion": "null",\n'
+        '        "coste_estimado": 850.0,\n'
+        '        "espacio": "Aula 401",\n'
+        '        "categoria": "Audiovisuales",\n'
+        '        "usuario_reporta": "Marta López",\n'
+        '        "tecnico": "null",\n'
+        '        "proveedor": "Samsung"\n'
+        '    },\n'
+        '    {\n'
+        '        "id": 3,\n'
+        '        "titulo": "Fusible central fundido",\n'
+        '        "descripcion": "Sin suministro en el cuadro '
+        'principal que alimenta la sala del Departamento Tech.",\n'
+        '        "foto_url": "fotos/cuadro_electrico.jpg",\n'
+        '        "prioridad": "Urgente",\n'
+        '        "estado": "EN_CURSO",\n'
+        '        "fecha_creacion": "2026-11-05",\n'
+        '        "fecha_objetivo": "2026-11-05",\n'
+        '        "fecha_resolucion": "null",\n'
+        '        "coste_estimado": 340.0,\n'
+        '        "espacio": "Departamento Tech",\n'
+        '        "categoria": "Electricidad",\n'
+        '        "usuario_reporta": "Luis Martínez",\n'
+        '        "tecnico": "null",\n'
+        '        "proveedor": "Schneider"\n'
+        '    },\n'
+        '    {\n'
+        '        "id": 4,\n'
+        '        "titulo": "Monitor de recepción no se conecta '
+        'el hdmi",\n'
+        '        "descripcion": "El monitor de información de '
+        'recepción no reconoce la señal del puerto HDMI.",\n'
+        '        "foto_url": "fotos/hdmi_recepcion.jpg",\n'
+        '        "prioridad": "Media",\n'
+        '        "estado": "ABIERTA",\n'
+        '        "fecha_creacion": "2026-11-05",\n'
+        '        "fecha_objetivo": "2026-11-08",\n'
+        '        "fecha_resolucion": "null",\n'
+        '        "coste_estimado": 45.0,\n'
+        '        "espacio": "Recepción",\n'
+        '        "categoria": "Audiovisuales",\n'
+        '        "usuario_reporta": "Elena Ruiz",\n'
+        '        "tecnico": "Lucía (Soporte IT)",\n'
+        '        "proveedor": "Samsung"\n'
+        '    },\n'
+        '    {\n'
+        '        "id": 5,\n'
+        '        "titulo": "Microondas del office echa chispas",\n'
+        '        "descripcion": "El microondas del comedor de '
+        'profesores no calienta y hace ruido de cortocircuito.",\n'
+        '        "foto_url": "fotos/microondas_office.jpg",\n'
+        '        "prioridad": "Baja",\n'
+        '        "estado": "RESUELTA",\n'
+        '        "fecha_creacion": "2026-11-05",\n'
+        '        "fecha_objetivo": "2026-11-15",\n'
+        '        "fecha_resolucion": "2026-11-06",\n'
+        '        "coste_estimado": 150.0,\n'
+        '        "espacio": "Office Profesores",\n'
+        '        "categoria": "Electrodomésticos",\n'
+        '        "usuario_reporta": "Marta López",\n'
+        '        "tecnico": "Antonio (Mantenimiento)",\n'
+        '        "proveedor": "Electro Reparaciones"\n'
+        '    },\n'
+        '    {\n'
+        '        "id": 6,\n'
+        '        "titulo": "Fuga de agua en lavabo",\n'
+        '        "descripcion": "Goteo constante en el grifo del '
+        'baño de la primera planta.",\n'
+        '        "foto_url": "fotos/fuga_agua1.jpg",\n'
+        '        "prioridad": "Media",\n'
+        '        "estado": "ABIERTA",\n'
+        '        "fecha_creacion": "2026-10-28",\n'
+        '        "fecha_objetivo": "2026-10-30",\n'
+        '        "fecha_resolucion": "2026-10-29",\n'
+        '        "coste_estimado": 65.0,\n'
+        '        "espacio": "Baño Planta 1",\n'
+        '        "categoria": "Fontanería",\n'
+        '        "usuario_reporta": "Pedro Sánchez",\n'
+        '        "tecnico": "José (Fontanero Interno)",\n'
+        '        "proveedor": "Fontanería Paco"\n'
+        '    },\n'
+        '    {\n'
+        '        "id": 7,\n'
+        '        "titulo": "Silla de oficina rota",\n'
+        '        "descripcion": "Una de las ruedas de la silla del '
+        'despacho 12 se ha desprendido.",\n'
+        '        "foto_url": "fotos/silla_rota.jpg",\n'
+        '        "prioridad": "Baja",\n'
+        '        "estado": "ABIERTA",\n'
+        '        "fecha_creacion": "2026-11-03",\n'
+        '        "fecha_objetivo": "2026-11-10",\n'
+        '        "fecha_resolucion": "null",\n'
+        '        "coste_estimado": 25.0,\n'
+        '        "espacio": "Despacho 12",\n'
+        '        "categoria": "Mobiliario",\n'
+        '        "usuario_reporta": "Ana Silva",\n'
+        '        "tecnico": "null",\n'
+        '        "proveedor": "Ofita S.A."\n'
+        '    },\n'
+        '    {\n'
+        '        "id": 8,\n'
+        '        "titulo": "Aire acondicionado no enfría",\n'
+        '        "descripcion": "El split de la sala de reuniones '
+        'hace ruido pero no baja la temperatura.",\n'
+        '        "foto_url": "fotos/aire_acondicionado.jpg",\n'
+        '        "prioridad": "Alta",\n'
+        '        "estado": "ABIERTA",\n'
+        '        "fecha_creacion": "2026-11-04",\n'
+        '        "fecha_objetivo": "2026-11-06",\n'
+        '        "fecha_resolucion": "null",\n'
+        '        "coste_estimado": 180.0,\n'
+        '        "espacio": "Sala de Reuniones B",\n'
+        '        "categoria": "Climatización",\n'
+        '        "usuario_reporta": "Jorge Noguera",\n'
+        '        "tecnico": "Antonio (Mantenimiento)",\n'
+        '        "proveedor": "ClimaTech"\n'
+        '    },\n'
+        '    {\n'
+        '        "id": 9,\n'
+        '        "titulo": "Puerta de entrada atascada",\n'
+        '        "descripcion": "La cerradura electrónica de la '
+        'entrada principal no lee las tarjetas.",\n'
+        '        "foto_url": "fotos/cerradura.jpg",\n'
+        '        "prioridad": "Urgente",\n'
+        '        "estado": "RESUELTA",\n'
+        '        "fecha_creacion": "2026-10-25",\n'
+        '        "fecha_objetivo": "2026-10-25",\n'
+        '        "fecha_resolucion": "2026-10-25",\n'
+        '        "coste_estimado": 310.0,\n'
+        '        "espacio": "Entrada Principal",\n'
+        '        "categoria": "Cerrajería",\n'
+        '        "usuario_reporta": "Elena Ruiz",\n'
+        '        "tecnico": "null",\n'
+        '        "proveedor": "Cerrajeros 24h Express"\n'
+        '    },\n'
+        '    {\n'
+        '        "id": 10,\n'
+        '        "titulo": "Proyector con imagen borrosa",\n'
+        '        "descripcion": "El proyector del aula magna '
+        'necesita un cambio de lámpara o ajuste de lente.",\n'
+        '        "foto_url": "fotos/proyector.jpg",\n'
+        '        "prioridad": "Media",\n'
+        '        "estado": "ABIERTA",\n'
+        '        "fecha_creacion": "2026-11-02",\n'
+        '        "fecha_objetivo": "2026-11-07",\n'
+        '        "fecha_resolucion": "null",\n'
+        '        "coste_estimado": 120.0,\n'
+        '        "espacio": "Aula Magna",\n'
+        '        "categoria": "Audiovisuales",\n'
+        '        "usuario_reporta": "Laura Marín",\n'
+        '        "tecnico": "Lucía (Soporte IT)",\n'
+        '        "proveedor": "Samsung"\n'
+        '    },\n'
+        '    {\n'
+        '        "id": 11,\n'
+        '        "titulo": "Humedad en pared norte",\n'
+        '        "descripcion": "Mancha de humedad creciendo en '
+        'la pared norte de la biblioteca.",\n'
+        '        "foto_url": "fotos/humedad_biblio.jpg",\n'
+        '        "prioridad": "Alta",\n'
+        '        "estado": "ABIERTA",\n'
+        '        "fecha_creacion": "2026-10-20",\n'
+        '        "fecha_objetivo": "2026-10-30",\n'
+        '        "fecha_resolucion": "null",\n'
+        '        "coste_estimado": 450.0,\n'
+        '        "espacio": "Biblioteca",\n'
+        '        "categoria": "Infraestructura",\n'
+        '        "usuario_reporta": "David Casas",\n'
+        '        "tecnico": "null",\n'
+        '        "proveedor": "Reformas Integrales S.L."\n'
+        '    },\n'
+        '    {\n'
+        '        "id": 12,\n'
+        '        "titulo": "Lámpara parpadea",\n'
+        '        "descripcion": "Fluorescente del pasillo de la '
+        'segunda planta parpadea constantemente.",\n'
+        '        "foto_url": "fotos/lampara_parpadea.jpg",\n'
+        '        "prioridad": "Baja",\n'
+        '        "estado": "ABIERTA",\n'
+        '        "fecha_creacion": "2026-11-01",\n'
+        '        "fecha_objetivo": "2026-11-05",\n'
+        '        "fecha_resolucion": "2026-11-03",\n'
+        '        "coste_estimado": 15.0,\n'
+        '        "espacio": "Pasillo Planta 2",\n'
+        '        "categoria": "Electricidad",\n'
+        '        "usuario_reporta": "Luis Martínez",\n'
+        '        "tecnico": "Antonio (Mantenimiento)",\n'
+        '        "proveedor": "Schneider"\n'
+        '    },\n'
+        '    {\n'
+        '        "id": 13,\n'
+        '        "titulo": "Mesa de reuniones tambalea",\n'
+        '        "descripcion": "A la mesa principal de la sala '
+        'de juntas le falta un taco nivelador.",\n'
+        '        "foto_url": "fotos/mesa_tambalea.jpg",\n'
+        '        "prioridad": "Baja",\n'
+        '        "estado": "ABIERTA",\n'
+        '        "fecha_creacion": "2026-11-04",\n'
+        '        "fecha_objetivo": "2026-11-12",\n'
+        '        "fecha_resolucion": "null",\n'
+        '        "coste_estimado": 5.0,\n'
+        '        "espacio": "Sala de Juntas",\n'
+        '        "categoria": "Mobiliario",\n'
+        '        "usuario_reporta": "Marta López",\n'
+        '        "tecnico": "José (Mantenimiento)",\n'
+        '        "proveedor": "Ofita S.A."\n'
+        '    },\n'
+        '    {\n'
+        '        "id": 14,\n'
+        '        "titulo": "Inodoro pierde agua por la base",\n'
+        '        "descripcion": "Fuga de agua limpia en la base '
+        'del inodoro del baño de minusválidos.",\n'
+        '        "foto_url": "fotos/inodoro_fuga.jpg",\n'
+        '        "prioridad": "Alta",\n'
+        '        "estado": "EN_CURSO",\n'
+        '        "fecha_creacion": "2026-11-05",\n'
+        '        "fecha_objetivo": "2026-11-06",\n'
+        '        "fecha_resolucion": "null",\n'
+        '        "coste_estimado": 90.0,\n'
+        '        "espacio": "Baño Minusválidos (Planta 0)",\n'
+        '        "categoria": "Fontanería",\n'
+        '        "usuario_reporta": "Pedro Sánchez",\n'
+        '        "tecnico": "José (Fontanero Interno)",\n'
+        '        "proveedor": "Fontanería Paco"\n'
+        '    },\n'
+        '    {\n'
+        '        "id": 15,\n'
+        '        "titulo": "Router principal sin conexión",\n'
+        '        "descripcion": "Caída masiva de red wifi en el '
+        'ala este del edificio.",\n'
+        '        "foto_url": "fotos/router_wifi.jpg",\n'
+        '        "prioridad": "Urgente",\n'
+        '        "estado": "RESUELTA",\n'
+        '        "fecha_creacion": "2026-11-02",\n'
+        '        "fecha_objetivo": "2026-11-02",\n'
+        '        "fecha_resolucion": "2026-11-02",\n'
+        '        "coste_estimado": 0.0,\n'
+        '        "espacio": "Rack Servidores (Ala Este)",\n'
+        '        "categoria": "Redes",\n'
+        '        "usuario_reporta": "Marta López",\n'
+        '        "tecnico": "Lucía (Soporte IT)",\n'
+        '        "proveedor": "Telefónica"\n'
+        '    },\n'
+        '    {\n'
+        '        "id": 16,\n'
+        '        "titulo": "Ventana exterior no cierra",\n'
+        '        "descripcion": "La bisagra de la ventana del '
+        'aula 202 está trabada y entra frío.",\n'
+        '        "foto_url": "fotos/ventana_traba.jpg",\n'
+        '        "prioridad": "Media",\n'
+        '        "estado": "ABIERTA",\n'
+        '        "fecha_creacion": "2026-11-05",\n'
+        '        "fecha_objetivo": "2026-11-09",\n'
+        '        "fecha_resolucion": "null",\n'
+        '        "coste_estimado": 55.0,\n'
+        '        "espacio": "Aula 202",\n'
+        '        "categoria": "Infraestructura",\n'
+        '        "usuario_reporta": "Laura Marín",\n'
+        '        "tecnico": "null",\n'
+        '        "proveedor": "Aluminios Gómez"\n'
+        '    },\n'
+        '    {\n'
+        '        "id": 17,\n'
+        '        "titulo": "Pizarra blanca descolgada",\n'
+        '        "descripcion": "Uno de los anclajes de la pared '
+        'ha cedido en el aula 105.",\n'
+        '        "foto_url": "fotos/pizarra.jpg",\n'
+        '        "prioridad": "Media",\n'
+        '        "estado": "RESUELTA",\n'
+        '        "fecha_creacion": "2026-10-31",\n'
+        '        "fecha_objetivo": "2026-11-03",\n'
+        '        "fecha_resolucion": "2026-11-01",\n'
+        '        "coste_estimado": 20.0,\n'
+        '        "espacio": "Aula 105",\n'
+        '        "categoria": "Mobiliario",\n'
+        '        "usuario_reporta": "Ana Silva",\n'
+        '        "tecnico": "Antonio (Mantenimiento)",\n'
+        '        "proveedor": "Ofita S.A."\n'
+        '    },\n'
+        '    {\n'
+        '        "id": 18,\n'
+        '        "titulo": "Cristal de puerta roto",\n'
+        '        "descripcion": "Impacto accidental ha rajado el '
+        'cristal de la puerta del comedor.",\n'
+        '        "foto_url": "fotos/cristal_roto.jpg",\n'
+        '        "prioridad": "Urgente",\n'
+        '        "estado": "EN_CURSO",\n'
+        '        "fecha_creacion": "2026-11-05",\n'
+        '        "fecha_objetivo": "2026-11-06",\n'
+        '        "fecha_resolucion": "null",\n'
+        '        "coste_estimado": 220.0,\n'
+        '        "espacio": "Comedor Principal",\n'
+        '        "categoria": "Cristalería",\n'
+        '        "usuario_reporta": "Elena Ruiz",\n'
+        '        "tecnico": "null",\n'
+        '        "proveedor": "Cristalerías Rápidas 24h"\n'
+        '    },\n'
+        '    {\n'
+        '        "id": 19,\n'
+        '        "titulo": "Filtro de fuente de agua atascado",\n'
+        '        "descripcion": "La fuente del pasillo tira muy '
+        'poca agua al pulsar el botón.",\n'
+        '        "foto_url": "fotos/fuente_agua.jpg",\n'
+        '        "prioridad": "Baja",\n'
+        '        "estado": "ABIERTA",\n'
+        '        "fecha_creacion": "2026-11-01",\n'
+        '        "fecha_objetivo": "2026-11-10",\n'
+        '        "fecha_resolucion": "null",\n'
+        '        "coste_estimado": 35.0,\n'
+        '        "espacio": "Pasillo Planta 2",\n'
+        '        "categoria": "Fontanería",\n'
+        '        "usuario_reporta": "Jorge Noguera",\n'
+        '        "tecnico": "null",\n'
+        '        "proveedor": "Fuentes y Dispensadores S.A."\n'
+        '    },\n'
+        '    {\n'
+        '        "id": 20,\n'
+        '        "titulo": "Enchufe quemado",\n'
+        '        "descripcion": "Marcas negras alrededor del '
+        'enchufe del laboratorio B.",\n'
+        '        "foto_url": "fotos/enchufe_quemado.jpg",\n'
+        '        "prioridad": "Alta",\n'
+        '        "estado": "RESUELTA",\n'
+        '        "fecha_creacion": "2026-10-29",\n'
+        '        "fecha_objetivo": "2026-10-31",\n'
+        '        "fecha_resolucion": "2026-10-30",\n'
+        '        "coste_estimado": 40.0,\n'
+        '        "espacio": "Laboratorio B",\n'
+        '        "categoria": "Electricidad",\n'
+        '        "usuario_reporta": "David Casas",\n'
+        '        "tecnico": "Antonio (Mantenimiento)",\n'
+        '        "proveedor": "Schneider"\n'
+        '    }\n'
+        ']'
+    )
+    return json.loads(datos_json)

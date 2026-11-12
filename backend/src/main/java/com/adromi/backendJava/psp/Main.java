@@ -17,7 +17,7 @@ public class Main{
         //Ruta relativa para crear la carpeta que contiene el archivo logs
         String rutaCarpetaLog = "backend/archivos_creados/archivos-log";
         //Nombre archivo para los logs
-        String rutaArchivoLog = rutaCarpetaLog + "/archivo.log";
+        String rutaArchivoLog = rutaCarpetaLog + "/psp.log";
 
         // 2. Crear la carpeta si no existe en el proyecto
         File directorio = new File(rutaCarpetaLog);

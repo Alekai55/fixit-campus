@@ -2,6 +2,10 @@ import matplotlib.pyplot as plt
 import io
 import cargardatos
 import filtro
+from pathlib import Path
+
+ruta = Path("analytics/graficos")
+ruta.mkdir(parents=True, exist_ok=True)
 
 datos = cargardatos.cargardatos()
 incidencias_filtradas = filtro.filtrar(datos)

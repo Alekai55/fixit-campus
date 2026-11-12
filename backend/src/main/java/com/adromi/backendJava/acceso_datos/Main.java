@@ -3,19 +3,31 @@ package com.adromi.backendJava.acceso_datos;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.*;
 
 public class Main {
+    static Logger logger = LogAD.getLogger();
+    static int incidencias_correctas = 0;
+    static int incidencias_incorrectas = 0;
 
-    public static void main(String[] args){
+    public static void main(String[] args) throws IOException {
+        LogAD.crearLog();
         generarExcel();
     }
 
-    private static void generarExcel() {
+    private static void generarExcel() throws IOException {
+        // Generar estructura de carpetas donde se almacenaran los archivos generados
+        File carpetas = new File("backend/archivos_creados");
+        if (!carpetas.exists()){
+            carpetas.mkdirs();
+        }
+        // Generar lista de incidencias
         List<Datos> lista = new ArrayList<>(List.of(new Datos(1,
                         "Proyector averiado en Sala de Reuniones B",
                         "El proyector principal no da imagen y la luz de estado parpadea en rojo tras encenderlo.",
@@ -68,31 +80,34 @@ public class Main {
 
             //Bucle para leer toda la lista e implementar los datos dentro del Excel
             for (int i = 0; i < lista.size(); i++) {
+                try {
+                    row = hoja.createRow(1 + i); // Le sumamos 1 para que escoga la fila 1, ya que la 0 tiene los titulos
+                    row.createCell(0).setCellValue(lista.get(i).getIdIncidencia());
+                    row.createCell(1).setCellValue(lista.get(i).getTitulo());
+                    row.createCell(2).setCellValue(lista.get(i).getDescripcion());
+                    row.createCell(3).setCellValue(lista.get(i).getFotoUrl());
+                    row.createCell(4).setCellValue(lista.get(i).getPrioridad());
+                    row.createCell(5).setCellValue(lista.get(i).getEstado());
+                    row.createCell(6).setCellValue(lista.get(i).getFechaCreacion());
+                    row.createCell(7).setCellValue(lista.get(i).getFechaObjetivo());
+                    row.createCell(8).setCellValue(lista.get(i).getIdEspacio());
+                    row.createCell(9).setCellValue(lista.get(i).getIdCategoria());
+                    row.createCell(10).setCellValue(lista.get(i).getIdUsuario());
+                    row.createCell(11).setCellValue(lista.get(i).getIdUsuarioTecnico());
+                    row.createCell(12).setCellValue(lista.get(i).getIdProveedor());
 
-                row = hoja.createRow(1+i); // Le sumamos 1 para que escoga la fila 1, ya que la 0 tiene los titulos
-                row.createCell(0).setCellValue(lista.get(i).getIdIncidencia());
-                row.createCell(1).setCellValue(lista.get(i).getTitulo());
-                row.createCell(2).setCellValue(lista.get(i).getDescripcion());
-                row.createCell(3).setCellValue(lista.get(i).getFotoUrl());
-                row.createCell(4).setCellValue(lista.get(i).getPrioridad());
-                row.createCell(5).setCellValue(lista.get(i).getEstado());
-                row.createCell(6).setCellValue(lista.get(i).getFechaCreacion());
-                row.createCell(7).setCellValue(lista.get(i).getFechaObjetivo());
-                row.createCell(8).setCellValue(lista.get(i).getIdEspacio());
-                row.createCell(9).setCellValue(lista.get(i).getIdCategoria());
-                row.createCell(10).setCellValue(lista.get(i).getIdUsuario());
-                row.createCell(11).setCellValue(lista.get(i).getIdUsuarioTecnico());
-                row.createCell(12).setCellValue(lista.get(i).getIdProveedor());
-
-                //Aqui implementar log para cada usuario agregado, con contador para agregados correctamente.
+                    //Aqui implementar log para cada incidencia agregado, con contador para agregados correctamente.
+                    logger.info("Incidencia " + lista.get(i).getIdIncidencia() + " agregada correctamente.\n");
+                    incidencias_correctas +=1;
+                } catch (Exception e) {
+                    logger.warning("Error al agregar incidencia: " + lista.get(i).getIdIncidencia()+"\n");
+                    incidencias_incorrectas +=1;
+                }
             }
-
             // Codigo para ejecutar y crear libro
             libro.write(archivo_excel);
+            logger.info("-------------------Resumen de incidencias -------------------\nIncidencias Correctas: " + incidencias_correctas+"\nincidencias_incorrectas: "+incidencias_incorrectas);
 
-        } catch (IOException e) {
-            //Aqui implementar log para cada usuario que falla al agregar , con contador para no agregados.
-            throw new RuntimeException(e);
         }
 
     }
