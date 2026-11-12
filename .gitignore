@@ -161,3 +161,6 @@ archivos-log/
 archivos_creados/
 **/archivos_creados/
 
+# Archivos y carpetas generados específicamente por la lógica de analytics Python
+graficos/
+

@@ -106,7 +106,7 @@ public class Main {
             }
             // Codigo para ejecutar y crear libro
             libro.write(archivo_excel);
-            logger.info("-------------------Resumen de incidencias -------------------\nIncidencias Correctas: " + incidencias_correctas+"\nincidencias_incorrectas; "+incidencias_incorrectas);
+            logger.info("-------------------Resumen de incidencias -------------------\nIncidencias Correctas: " + incidencias_correctas+"\nincidencias_incorrectas: "+incidencias_incorrectas);
 
         }
 
