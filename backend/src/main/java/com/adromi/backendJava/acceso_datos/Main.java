@@ -6,15 +6,14 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.*;
 
 public class Main {
     static Logger logger = LogAD.getLogger();
-    static int incidencias_correctas = 0;
-    static int incidencias_incorrectas = 0;
+    static int datos_correctos = 0;
+    static int datos_incorrectos = 0;
 
     public static void main(String[] args) throws IOException {
         LogAD.crearLog();
@@ -27,34 +26,6 @@ public class Main {
         if (!carpetas.exists()){
             carpetas.mkdirs();
         }
-        // Generar lista de incidencias
-        /*List<Datos> lista = new ArrayList<>(List.of(new Datos(1,
-                        "Proyector averiado en Sala de Reuniones B",
-                        "El proyector principal no da imagen y la luz de estado parpadea en rojo tras encenderlo.",
-                        "https://midominio.com/archivos/img_incidencia_001.jpg",
-                        "Alta",
-                        "Abierta",
-                        LocalDateTime.of(2026, 11, 9, 9, 15),
-                        LocalDateTime.of(2026, 11, 10, 12, 0),
-                        102,
-                        4,
-                        23,
-                        0,
-                        0),
-
-                new Datos(2,
-                        "Fuga de agua en lavabos de la planta baja",
-                        "El lavabo número 3 tiene un goteo constante en la tubería inferior, creando un charco.",
-                        "https://midominio.com/archivos/img_incidencia_002.jpg",
-                        "Media",
-                        "En progreso",
-                        LocalDateTime.of(2026, 11, 9, 11, 30),
-                        LocalDateTime.of(2026, 11, 9, 18, 0),
-                        45,
-                        2,
-                        12,
-                        7,
-                        3)));*/
 
         // Nombres de las hojas del libro
         List<String> hojas = new ArrayList<>(List.of(
@@ -125,16 +96,12 @@ public class Main {
                                 // Crea la celda de la columna c y escribe dentro el texto datos[c]
                                 // (un texto vacio "" deja la celda vacia)
                                 fila.createCell(c).setCellValue(datos[c]);
-                            }
-                            // Solo para la hoja incidencia: se registra en el log y se cuenta como correcta
-                            if (nombreHoja.equals("incidencia")) {
-                                logger.info("Incidencia " + datos[0] + " agregada correctamente.");
-                                incidencias_correctas += 1;
+                                datos_correctos+=1;
                             }
                         } catch (Exception e) {
                             // Algo fallo al escribir esta fila: se anota y, si es incidencia, se cuenta como incorrecta
                             logger.warning("Error al agregar la fila " + (i + 1) + " de la hoja " + nombreHoja);
-                            if (nombreHoja.equals("incidencia")) incidencias_incorrectas += 1;
+                            if (nombreHoja.equals("incidencia")) datos_incorrectos += 1;
                         }
                     }
                 }
@@ -142,7 +109,7 @@ public class Main {
 
             // Codigo para ejecutar y crear libro
             libro.write(archivo_excel);
-            logger.info("-------------------Resumen de incidencias -------------------\nIncidencias Correctas: " + incidencias_correctas+"\nincidencias_incorrectas: "+incidencias_incorrectas);
+            logger.info("-------------------Resumen de datos -------------------\nDatos cargado correctamente: " + datos_correctos+"\nDatos cargados incorrectamente: "+datos_incorrectos);
 
         }
 

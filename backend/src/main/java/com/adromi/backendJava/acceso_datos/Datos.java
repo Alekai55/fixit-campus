@@ -5,8 +5,7 @@ import java.util.List;
 
 public class Datos {
 
-    // Cada metodo devuelve los datos de una hoja del Excel.
-    // Cada fila es un array de textos: una posicion por cada columna ("" = celda vacia).
+    //Creamos todos los datos con new String[] ya que luego los manejaremos por String en vez de datos separads
 
     public static List<String[]> cargarRol() {
         List<String[]> filas = new ArrayList<>();
@@ -46,8 +45,6 @@ public class Datos {
 
     public static List<String[]> cargarIncidencia() {
         List<String[]> filas = new ArrayList<>();
-        // Columnas: id, titulo, descripcion, foto_url, prioridad, estado, fecha_creacion,
-        // fecha_objetivo, fecha_resolucion, id_espacio, id_categoria, id_usuario, id_tecnico, id_proveedor
         filas.add(new String[]{"1", "Proyector averiado en Sala de Reuniones B",
                 "El proyector principal no da imagen y la luz de estado parpadea en rojo.",
                 "https://midominio.com/archivos/img_incidencia_001.jpg", "Alta", "Abierta",
