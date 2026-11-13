@@ -14,3 +14,5 @@ incidencias_filtradas = filtro.filtrar(datos)
 
 graficos.grafica_incidencias_por_espacio(incidencias_filtradas)
 graficos.grafica_media_resolucion(datos)
+graficos.grafico_quesos_estados(datos)
+
