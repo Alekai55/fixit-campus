@@ -2,6 +2,7 @@
 
 import io
 from datetime import datetime
+from collections import Counter
 
 import matplotlib.pyplot as plt
 
@@ -92,5 +93,56 @@ def grafica_media_resolucion(incidencias):
     plt.savefig(buf, format="png")
     with open(
         "analytics/graficos/grafico_media_resolucion.png", "wb"
+    ) as f:
+        f.write(buf.getbuffer())
+
+def grafico_quesos_estados(incidencias):
+
+    #Extraer y contar los estados
+    # Esto genera un diccionario con los totales, ej: {'EN_CURSO': 2, 'ABIERTA': 2, 'RESUELTA': 1}
+    conteo_estados = Counter(incidencia['estado'] for incidencia in incidencias)
+
+    # Preparar los datos para matplotlib
+    etiquetas = []
+    valores = []
+
+    # Mapeamos los valores del JSON a etiquetas legibles para la gráfica
+    for estado, cantidad in conteo_estados.items():
+        if estado == "EN_CURSO":
+            etiquetas.append("En Curso")
+        elif estado == "ABIERTA":
+            etiquetas.append("Abiertas")
+        elif estado == "RESUELTA":
+            etiquetas.append("Resueltas")
+        else:
+            etiquetas.append(estado.capitalize())
+
+        valores.append(cantidad)
+
+    # Configuracion de colores personalizados por hexadecimal
+    # Naranja para En Curso, Rojo para Abiertas, Verde para Resueltas
+    colores = ['#ff9999', '#ffcc99', '#99ff99']
+
+    # Creación de la gráfica de queso
+    plt.figure(figsize=(8, 6))
+
+    plt.pie(
+        valores,
+        labels=etiquetas,
+        colors=colores,
+        autopct='%1.1f%%',  # Muestra el porcentaje con 1 decimal
+        startangle=90,  # Rota la gráfica para que el primer corte empiece arriba
+        shadow=True,  # Añade un efecto de sombra 3D
+        wedgeprops={'edgecolor': 'black'}  # Borde negro en los cortes para mayor contraste
+    )
+
+    # Esto asegura que la gráfica sea un círculo perfecto y no un óvalo
+    plt.axis('equal')
+
+    plt.title('Distribución de Incidencias por Estado', pad=20, fontsize=14, fontweight='bold')
+    buf = io.BytesIO()
+    plt.savefig(buf, format="png")
+    with open(
+            "analytics/graficos/grafico_queso_estados.png", "wb"
     ) as f:
         f.write(buf.getbuffer())
