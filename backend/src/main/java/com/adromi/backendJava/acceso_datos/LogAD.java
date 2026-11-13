@@ -20,7 +20,7 @@ public class LogAD {
     }
 
     public static void crearLog() throws IOException {
-        System.setProperty("java.util.logging.SimpleFormatter.format", "%1$tF %1$tT %4$s %n%5$s%6$s%n"); //modifacamos el formato del sistema para texo más legible
+        System.setProperty("java.util.logging.SimpleFormatter.format", "%1$tF %1$tT %4$s %n%5$s%6$s%n%n"); //modifacamos el formato del sistema para texo más legible
 
         //Ruta relativa para crear la carpeta que contiene el archivo logs
         String rutaCarpetaLog = "backend/archivos_creados/archivos-log";

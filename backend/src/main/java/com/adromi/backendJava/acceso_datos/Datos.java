@@ -1,161 +1,80 @@
 package com.adromi.backendJava.acceso_datos;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Datos {
-    private int idIncidencia;
-    private String titulo;
-    private String descripcion;
-    private String fotoUrl;
-    private String prioridad;
-    private String estado;
-    private LocalDateTime fechaCreacion;
-    private LocalDateTime fechaObjetivo;
-    private int idEspacio;
-    private int idCategoria;
-    private int idUsuario;
-    private int idUsuarioTecnico;
-    private int idProveedor;
 
-    public Datos(int idIncidencia, String titulo, String descripcion, String fotoUrl, String prioridad, String estado, LocalDateTime fechaCreacion, LocalDateTime fechaObjetivo, int idEspacio, int idCategoria, int idUsuario, int idUsuarioTecnico, int idProveedor) {
-        this.idIncidencia = idIncidencia;
-        this.titulo = titulo;
-        this.descripcion = descripcion;
-        this.fotoUrl = fotoUrl;
-        this.prioridad = prioridad;
-        this.estado = estado;
-        this.fechaCreacion = fechaCreacion;
-        this.fechaObjetivo = fechaObjetivo;
-        this.idEspacio = idEspacio;
-        this.idCategoria = idCategoria;
-        this.idUsuario = idUsuario;
-        this.idUsuarioTecnico = idUsuarioTecnico;
-        this.idProveedor = idProveedor;
-    }
-    public Datos(){
+    // Cada metodo devuelve los datos de una hoja del Excel.
+    // Cada fila es un array de textos: una posicion por cada columna ("" = celda vacia).
 
+    public static List<String[]> cargarRol() {
+        List<String[]> filas = new ArrayList<>();
+        filas.add(new String[]{"1", "Administrador"});
+        filas.add(new String[]{"2", "Usuario"});
+        filas.add(new String[]{"3", "Tecnico"});
+        return filas;
     }
 
-    @Override
-    public String toString() {
-        return "Datos{" +
-                "idIncidencia=" + idIncidencia +
-                ", titulo='" + titulo + '\'' +
-                ", descripcion='" + descripcion + '\'' +
-                ", fotoUrl='" + fotoUrl + '\'' +
-                ", prioridad='" + prioridad + '\'' +
-                ", estado='" + estado + '\'' +
-                ", fechaCreacion=" + fechaCreacion +
-                ", fechaObjetivo=" + fechaObjetivo +
-                ", idEspacio=" + idEspacio +
-                ", idCategoria=" + idCategoria +
-                ", idUsuario=" + idUsuario +
-                ", idUsuarioTecnico=" + idUsuarioTecnico +
-                ", idProveedor=" + idProveedor +
-                '}';
+    public static List<String[]> cargarUsuario() {
+        List<String[]> filas = new ArrayList<>();
+        filas.add(new String[]{"7", "Pedro", "Lopez", "pedro@mail.com", "1234", "3"});
+        filas.add(new String[]{"12", "Ana", "Garcia", "ana@mail.com", "1234", "2"});
+        filas.add(new String[]{"23", "Luis", "Perez", "luis@mail.com", "1234", "2"});
+        return filas;
     }
 
-    public int getIdIncidencia() {
-        return idIncidencia;
+    public static List<String[]> cargarEspacio() {
+        List<String[]> filas = new ArrayList<>();
+        filas.add(new String[]{"45", "A", "0", "Aseos", "Aseos", "true"});
+        filas.add(new String[]{"102", "B", "1", "Sala de Reuniones B", "Sala", "true"});
+        return filas;
     }
 
-    public void setIdIncidencia(int idIncidencia) {
-        this.idIncidencia = idIncidencia;
+    public static List<String[]> cargarCategoria() {
+        List<String[]> filas = new ArrayList<>();
+        filas.add(new String[]{"2", "Fontaneria"});
+        filas.add(new String[]{"4", "Audiovisual"});
+        return filas;
     }
 
-    public String getTitulo() {
-        return titulo;
+    public static List<String[]> cargarProveedor() {
+        List<String[]> filas = new ArrayList<>();
+        filas.add(new String[]{"3", "Fontaneria Sanchez", "B12345678", "Fontaneria", "600111222", "fsanchez@mail.com", "30.0"});
+        return filas;
     }
 
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
+    public static List<String[]> cargarIncidencia() {
+        List<String[]> filas = new ArrayList<>();
+        // Columnas: id, titulo, descripcion, foto_url, prioridad, estado, fecha_creacion,
+        // fecha_objetivo, fecha_resolucion, id_espacio, id_categoria, id_usuario, id_tecnico, id_proveedor
+        filas.add(new String[]{"1", "Proyector averiado en Sala de Reuniones B",
+                "El proyector principal no da imagen y la luz de estado parpadea en rojo.",
+                "https://midominio.com/archivos/img_incidencia_001.jpg", "Alta", "Abierta",
+                "2026-11-09 09:15", "2026-11-10 12:00", "", "102", "4", "23", "", ""});
+        filas.add(new String[]{"2", "Fuga de agua en lavabos de la planta baja",
+                "El lavabo numero 3 tiene un goteo constante en la tuberia inferior.",
+                "https://midominio.com/archivos/img_incidencia_002.jpg", "Media", "En progreso",
+                "2026-11-09 11:30", "2026-11-09 18:00", "", "45", "2", "12", "7", "3"});
+        return filas;
     }
 
-    public String getDescripcion() {
-        return descripcion;
+    public static List<String[]> cargarComentario() {
+        List<String[]> filas = new ArrayList<>();
+        filas.add(new String[]{"1", "Ya he avisado al tecnico", "2026-11-09 12:00", "2", "12"});
+        filas.add(new String[]{"2", "Revisando el proyector", "2026-11-09 10:00", "1", "23"});
+        return filas;
     }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+    public static List<String[]> cargarHistorialEstado() {
+        List<String[]> filas = new ArrayList<>();
+        filas.add(new String[]{"1", "Abierta", "En progreso", "2026-11-09 11:45", "Asignada a tecnico", "2", "7"});
+        return filas;
     }
 
-    public String getFotoUrl() {
-        return fotoUrl;
-    }
-
-    public void setFotoUrl(String fotoUrl) {
-        this.fotoUrl = fotoUrl;
-    }
-
-    public String getPrioridad() {
-        return prioridad;
-    }
-
-    public void setPrioridad(String prioridad) {
-        this.prioridad = prioridad;
-    }
-
-    public String getEstado() {
-        return estado;
-    }
-
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
-
-    public LocalDateTime getFechaCreacion() {
-        return fechaCreacion;
-    }
-
-    public void setFechaCreacion(LocalDateTime fechaCreacion) {
-        this.fechaCreacion = fechaCreacion;
-    }
-
-    public LocalDateTime getFechaObjetivo() {
-        return fechaObjetivo;
-    }
-
-    public void setFechaObjetivo(LocalDateTime fechaObjetivo) {
-        this.fechaObjetivo = fechaObjetivo;
-    }
-
-    public int getIdEspacio() {
-        return idEspacio;
-    }
-
-    public void setIdEspacio(int idEspacio) {
-        this.idEspacio = idEspacio;
-    }
-
-    public int getIdCategoria() {
-        return idCategoria;
-    }
-
-    public void setIdCategoria(int idCategoria) {
-        this.idCategoria = idCategoria;
-    }
-
-    public int getIdUsuario() {
-        return idUsuario;
-    }
-
-    public void setIdUsuario(int idUsuario) {
-        this.idUsuario = idUsuario;
-    }
-
-    public int getIdUsuarioTecnico() {
-        return idUsuarioTecnico;
-    }
-
-    public void setIdUsuarioTecnico(int idUsuarioTecnico) {
-        this.idUsuarioTecnico = idUsuarioTecnico;
-    }
-
-    public int getIdProveedor() {
-        return idProveedor;
-    }
-
-    public void setIdProveedor(int idProveedor) {
-        this.idProveedor = idProveedor;
+    public static List<String[]> cargarHistorialPrioridad() {
+        List<String[]> filas = new ArrayList<>();
+        filas.add(new String[]{"1", "Baja", "Media", "2026-11-09 11:40", "Empeora la fuga", "2", "7"});
+        return filas;
     }
 }
