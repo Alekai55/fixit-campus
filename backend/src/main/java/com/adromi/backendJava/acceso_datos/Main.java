@@ -89,19 +89,19 @@ public class Main {
                         Row fila = hoja.createRow(i + 1);
                         // Fila de datos que toca ahora: un array con un texto por cada columna
                         String[] datos = filas.get(i);
-                        // try/catch: si una fila falla, se anota en el log y el programa sigue
-                        try {
-                            // Bucle de COLUMNAS: una vuelta por cada texto de la fila
-                            for (int c = 0; c < datos.length; c++) {
+                        // Bucle de COLUMNAS: una vuelta por cada texto de la fila
+                        for (int c = 0; c < datos.length; c++) {
+                            // try/catch: si una columna falla, se anota en el log y el programa sigue
+                            try {
                                 // Crea la celda de la columna c y escribe dentro el texto datos[c]
                                 // (un texto vacio "" deja la celda vacia)
                                 fila.createCell(c).setCellValue(datos[c]);
                                 datos_correctos+=1;
+                            } catch (Exception e) {
+                                // Algo fallo al escribir esta columna: se anota y se cuenta como incorrecta
+                                logger.warning("Error al agregar la columna " + c + " de la fila " + (i + 1) + " de la hoja " + nombreHoja);
+                                datos_incorrectos += 1;
                             }
-                        } catch (Exception e) {
-                            // Algo fallo al escribir esta fila: se anota y, si es incidencia, se cuenta como incorrecta
-                            logger.warning("Error al agregar la fila " + (i + 1) + " de la hoja " + nombreHoja);
-                            datos_incorrectos += 1;
                         }
                     }
                 }
