@@ -101,7 +101,7 @@ public class Main {
                         } catch (Exception e) {
                             // Algo fallo al escribir esta fila: se anota y, si es incidencia, se cuenta como incorrecta
                             logger.warning("Error al agregar la fila " + (i + 1) + " de la hoja " + nombreHoja);
-                            if (nombreHoja.equals("incidencia")) datos_incorrectos += 1;
+                            datos_incorrectos += 1;
                         }
                     }
                 }
