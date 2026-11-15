@@ -3,9 +3,7 @@ package com.adromi.backendJava.acceso_datos;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.*;
@@ -15,9 +13,24 @@ public class Main {
     static int datos_correctos = 0;
     static int datos_incorrectos = 0;
 
+    private static List<String> columnas; // Se utiliza para evaluar el nombre de la hoja
+    private static List<String[]> filas = null;// Se usa para cargar los datos correspondientes de cada hoja
+
+    // Cabeceras de cada hoja
+    private static List<String> rol = new ArrayList<>(List.of("id_rol", "nombre"));
+    private static List<String> usuario = new ArrayList<>(List.of("id_usuario", "nombre", "apellidos", "email", "contrasena", "id_rol"));
+    private static List<String> espacio = new ArrayList<>(List.of("id_espacio", "edificio", "planta", "nombre_espacio", "tipo", "en_uso"));
+    private static List<String> categoria = new ArrayList<>(List.of("id_categoria", "nombre"));
+    private static List<String> proveedor = new ArrayList<>(List.of("id_proveedor", "razon_social", "nif", "especialidad", "telefono", "email", "precio_hora"));
+    private static List<String> incidencia = new ArrayList<>(List.of("id_incidencia", "titulo", "descripcion", "foto_url", "prioridad", "estado", "fecha_creacion", "fecha_objetivo", "fecha_resolucion", "id_espacio", "id_categoria", "id_usuario", "id_usuario_tecnico", "id_proveedor"));
+    private static List<String> comentario = new ArrayList<>(List.of("id_comentario", "texto", "fecha_creacion", "id_incidencia", "id_usuario"));
+    private static List<String> historial_estado = new ArrayList<>(List.of("id_historial_estado", "estado_anterior", "estado_nuevo", "fecha_cambio", "observaciones", "id_incidencia", "id_usuario"));
+    private static List<String> historial_prioridad = new ArrayList<>(List.of("id_historial_prioridad", "prioridad_anterior", "prioridad_nueva", "fecha_cambio", "motivo", "id_incidencia", "id_usuario"));
+
     public static void main(String[] args) throws IOException {
         LogAD.crearLog();
         generarExcel();
+        leerExcel();
     }
 
     private static void generarExcel() throws IOException {
@@ -32,16 +45,6 @@ public class Main {
                 "rol", "usuario", "espacio", "categoria", "proveedor",
                 "incidencia", "comentario", "historial_estado", "historial_prioridad"));
 
-        // Cabeceras de cada hoja
-        List<String> rol = new ArrayList<>(List.of("id_rol", "nombre"));
-        List<String> usuario = new ArrayList<>(List.of("id_usuario", "nombre", "apellidos", "email", "contrasena", "id_rol"));
-        List<String> espacio = new ArrayList<>(List.of("id_espacio", "edificio", "planta", "nombre_espacio", "tipo", "en_uso"));
-        List<String> categoria = new ArrayList<>(List.of("id_categoria", "nombre"));
-        List<String> proveedor = new ArrayList<>(List.of("id_proveedor", "razon_social", "nif", "especialidad", "telefono", "email", "precio_hora"));
-        List<String> incidencia = new ArrayList<>(List.of("id_incidencia", "titulo", "descripcion", "foto_url", "prioridad", "estado", "fecha_creacion", "fecha_objetivo", "fecha_resolucion", "id_espacio", "id_categoria", "id_usuario", "id_usuario_tecnico", "id_proveedor"));
-        List<String> comentario = new ArrayList<>(List.of("id_comentario", "texto", "fecha_creacion", "id_incidencia", "id_usuario"));
-        List<String> historial_estado = new ArrayList<>(List.of("id_historial_estado", "estado_anterior", "estado_nuevo", "fecha_cambio", "observaciones", "id_incidencia", "id_usuario"));
-        List<String> historial_prioridad = new ArrayList<>(List.of("id_historial_prioridad", "prioridad_anterior", "prioridad_nueva", "fecha_cambio", "motivo", "id_incidencia", "id_usuario"));
 
         //Creamos el libro de excel
         try (XSSFWorkbook libro = new XSSFWorkbook(); FileOutputStream archivo_excel = new FileOutputStream("backend/archivos_creados/excel_BDD.xlsx")) {
@@ -53,11 +56,10 @@ public class Main {
                 Row cabecera = hoja.createRow(0);
 
                 // Evaluamos el nombre de la hoja para saber que lista de titulos usar
-                List<String> columnas;
                 // 'filas' guarda los datos de la hoja actual. Cada elemento de la lista es una fila
                 // del Excel, y cada texto del array es una columna. El switch de abajo le pide los
                 // datos al metodo de Datos que corresponde a esta hoja (cargarRol, cargarUsuario...).
-                List<String[]> filas = null;
+
                 switch (nombreHoja) {
                     case "rol": columnas = rol; filas = Datos.cargarRol(); break;
                     case "usuario": columnas = usuario; filas = Datos.cargarUsuario(); break;
@@ -113,5 +115,63 @@ public class Main {
 
         }
 
+    }
+
+    private static void leerExcel() throws IOException {
+        // DataFormatter convierte cualquier celda (texto, numero, fecha) a String tal como se ve en Excel
+        DataFormatter formato = new DataFormatter();
+
+        // try-with-resources: cierra archivo y libro solos al terminar, aunque haya error
+        try (FileInputStream archivo = new FileInputStream("backend/archivos_creados/excel_BDD.xlsx");
+             XSSFWorkbook libro = new XSSFWorkbook(archivo)) {
+
+            // Bucle de HOJAS: una vuelta por cada hoja del libro
+            for (int i = 0; i < libro.getNumberOfSheets(); i++) {
+                Sheet hoja = libro.getSheetAt(i);
+                String nombreHoja = hoja.getSheetName();
+
+                // Segun la hoja, elegimos que lista de cabeceras corresponde.
+                // El break es obligatorio: sin el, Java sigue ejecutando los case de abajo.
+                switch (nombreHoja) {
+                    case "rol": columnas = rol; break;
+                    case "usuario": columnas = usuario; break;
+                    case "espacio": columnas = espacio; break;
+                    case "categoria": columnas = categoria; break;
+                    case "proveedor": columnas = proveedor; break;
+                    case "incidencia": columnas = incidencia; break;
+                    case "comentario": columnas = comentario; break;
+                    case "historial_estado": columnas = historial_estado; break;
+                    case "historial_prioridad": columnas = historial_prioridad; break;
+                    default:
+                        // Hoja que no conocemos: se avisa en el log y se salta a la siguiente
+                        logger.warning("Hoja desconocida: " + nombreHoja);
+                        continue;
+                }
+
+                // Aqui guardamos los datos leidos de esta hoja (una fila = un String[])
+                List<String[]> leidas = new ArrayList<>();
+
+                // Bucle de FILAS: la fila 0 son las cabeceras, asi que empezamos en 1.
+                // getLastRowNum() es el indice de la ultima fila, por eso <= (incluye la ultima).
+                for (int f = 1; f <= hoja.getLastRowNum(); f++) {
+                    Row fila = hoja.getRow(f);
+                    // Una fila totalmente vacia puede venir como null: se ignora
+                    if (fila == null) continue;
+
+                    // Crea un array de Strings vacío con tantos huecos como columnas tiene la hoja actual
+                    String[] datos = new String[columnas.size()];
+
+                    // Bucle de COLUMNAS: una vuelta por cada cabecera
+                    for (int c = 0; c < columnas.size(); c++) {
+                        // Guardamos cada elemento de la fila en una variable llamada celda para operar con ella
+                        Cell celda = fila.getCell(c);
+                        // Sentencia id/else en caso de ser nulo lo coloca como "", si no es nulo lo formatea para que sea un String siempre con el DataFormatter
+                        datos[c] = (celda == null) ? "" : formato.formatCellValue(celda);
+                    }
+                    leidas.add(datos);
+                }
+                logger.info("Hoja '" + nombreHoja + "': " + leidas.size() + " filas leidas");
+            }
+        }
     }
 }
