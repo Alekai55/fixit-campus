@@ -5,6 +5,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.*;
 
@@ -159,17 +160,18 @@ public class Main {
                     if (fila == null) continue;
 
                     // Crea un array de Strings vacío con tantos huecos como columnas tiene la hoja actual
-                    String[] datos = new String[columnas.size()];
+                    String[] datos = new String[columnas.size()-1];
 
                     // Bucle de COLUMNAS: una vuelta por cada cabecera
-                    for (int c = 0; c < columnas.size(); c++) {
+                    for (int c = 1; c < columnas.size(); c++) {
                         // Guardamos cada elemento de la fila en una variable llamada celda para operar con ella
                         Cell celda = fila.getCell(c);
                         // Sentencia id/else en caso de ser nulo lo coloca como "", si no es nulo lo formatea para que sea un String siempre con el DataFormatter
-                        datos[c] = (celda == null) ? "" : formato.formatCellValue(celda);
+                        datos[c-1] = (celda == null) ? "" : formato.formatCellValue(celda);
                     }
                     leidas.add(datos);
                 }
+                leidas.forEach(a -> System.out.println(java.util.Arrays.toString(a)));
                 logger.info("Hoja '" + nombreHoja + "': " + leidas.size() + " filas leidas");
             }
         }
