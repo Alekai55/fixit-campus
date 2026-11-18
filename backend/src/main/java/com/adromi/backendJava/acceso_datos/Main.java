@@ -1,9 +1,12 @@
 package com.adromi.backendJava.acceso_datos;
 
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xdgf.usermodel.XDGFDocument;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xwpf.usermodel.*;
 
 import java.io.*;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -14,24 +17,30 @@ public class Main {
     static int datos_correctos = 0;
     static int datos_incorrectos = 0;
 
+    // Datos de conexion a la BDD (cambiar por los tuyos)
+    private static final String URL = "jdbc:mysql://localhost:3306/fixit_campus";
+    private static final String USUARIO_BDD = "root";
+    private static final String CLAVE_BDD = "";
+
     private static List<String> columnas; // Se utiliza para evaluar el nombre de la hoja
     private static List<String[]> filas = null;// Se usa para cargar los datos correspondientes de cada hoja
 
     // Cabeceras de cada hoja
-    private static List<String> rol = new ArrayList<>(List.of("id_rol", "nombre"));
-    private static List<String> usuario = new ArrayList<>(List.of("id_usuario", "nombre", "apellidos", "email", "contrasena", "id_rol"));
-    private static List<String> espacio = new ArrayList<>(List.of("id_espacio", "edificio", "planta", "nombre_espacio", "tipo", "en_uso"));
-    private static List<String> categoria = new ArrayList<>(List.of("id_categoria", "nombre"));
-    private static List<String> proveedor = new ArrayList<>(List.of("id_proveedor", "razon_social", "nif", "especialidad", "telefono", "email", "precio_hora"));
-    private static List<String> incidencia = new ArrayList<>(List.of("id_incidencia", "titulo", "descripcion", "foto_url", "prioridad", "estado", "fecha_creacion", "fecha_objetivo", "fecha_resolucion", "id_espacio", "id_categoria", "id_usuario", "id_usuario_tecnico", "id_proveedor"));
-    private static List<String> comentario = new ArrayList<>(List.of("id_comentario", "texto", "fecha_creacion", "id_incidencia", "id_usuario"));
-    private static List<String> historial_estado = new ArrayList<>(List.of("id_historial_estado", "estado_anterior", "estado_nuevo", "fecha_cambio", "observaciones", "id_incidencia", "id_usuario"));
-    private static List<String> historial_prioridad = new ArrayList<>(List.of("id_historial_prioridad", "prioridad_anterior", "prioridad_nueva", "fecha_cambio", "motivo", "id_incidencia", "id_usuario"));
+    private static List<String> rol = new ArrayList<>(List.of("nombre"));
+    private static List<String> usuario = new ArrayList<>(List.of("nombre", "apellidos", "email", "contrasena", "id_rol"));
+    private static List<String> espacio = new ArrayList<>(List.of("edificio", "planta", "nombre_espacio", "tipo", "en_uso"));
+    private static List<String> categoria = new ArrayList<>(List.of("nombre"));
+    private static List<String> proveedor = new ArrayList<>(List.of("razon_social", "nif", "especialidad", "telefono", "email", "precio_hora"));
+    private static List<String> incidencia = new ArrayList<>(List.of("titulo", "descripcion", "foto_url", "prioridad", "estado", "fecha_creacion", "fecha_objetivo", "fecha_resolucion", "id_espacio", "id_categoria", "id_usuario", "id_usuario_tecnico", "id_proveedor"));
+    private static List<String> comentario = new ArrayList<>(List.of("texto", "fecha_creacion", "id_incidencia", "id_usuario"));
+    private static List<String> historial_estado = new ArrayList<>(List.of("estado_anterior", "estado_nuevo", "fecha_cambio", "observaciones", "id_incidencia", "id_usuario"));
+    private static List<String> historial_prioridad = new ArrayList<>(List.of("prioridad_anterior", "prioridad_nueva", "fecha_cambio", "motivo", "id_incidencia", "id_usuario"));
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, SQLException {
         LogAD.crearLog();
-        generarExcel();
-        leerExcel();
+        //generarExcel();
+       // leerExcel();
+        generarWord();
     }
 
     private static void generarExcel() throws IOException {
@@ -118,7 +127,7 @@ public class Main {
 
     }
 
-    private static void leerExcel() throws IOException {
+    private static void leerExcel() throws IOException, SQLException {
         // DataFormatter convierte cualquier celda (texto, numero, fecha) a String tal como se ve en Excel
         DataFormatter formato = new DataFormatter();
 
@@ -160,20 +169,73 @@ public class Main {
                     if (fila == null) continue;
 
                     // Crea un array de Strings vacío con tantos huecos como columnas tiene la hoja actual
-                    String[] datos = new String[columnas.size()-1];
+                    String[] datos = new String[columnas.size()];
 
-                    // Bucle de COLUMNAS: una vuelta por cada cabecera
-                    for (int c = 1; c < columnas.size(); c++) {
+                    // Bucle de COLUMNAS: una vuelta por cada cabecera (incluye el id, para que las claves foraneas coincidan)
+                    for (int c = 0; c < columnas.size(); c++) {
                         // Guardamos cada elemento de la fila en una variable llamada celda para operar con ella
                         Cell celda = fila.getCell(c);
                         // Sentencia id/else en caso de ser nulo lo coloca como "", si no es nulo lo formatea para que sea un String siempre con el DataFormatter
-                        datos[c-1] = (celda == null) ? "" : formato.formatCellValue(celda);
+                        datos[c] = (celda == null) ? "" : formato.formatCellValue(celda);
                     }
                     leidas.add(datos);
                 }
                 leidas.forEach(a -> System.out.println(java.util.Arrays.toString(a)));
                 logger.info("Hoja '" + nombreHoja + "': " + leidas.size() + " filas leidas");
+
+                // Se insertan todas las columnas
+                insertarHoja(nombreHoja, columnas, leidas);
             }
+        }
+    }
+
+    // Inserta las filas de una hoja en la tabla con el mismo nombre
+    private static void insertarHoja(String nombreHoja, List<String> cols, List<String[]> filasLeidas) throws SQLException {
+        // se coloca cols.size -1 porque si no se pondria 1 de mas al agregar el ? final. Si no agregamos el ? final terminaria en un , y daria fallo
+        String sql = "INSERT INTO " + nombreHoja + " (" + String.join(", ", cols) + ") VALUES ("+ "?, ".repeat(cols.size() - 1) + "?)";
+
+        try (Connection con = DriverManager.getConnection(URL, USUARIO_BDD, CLAVE_BDD);
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            for (String[] fila : filasLeidas) {
+                for (int i = 0; i < fila.length; i++) {
+                    // Leemos toda la fila, valor a valor, asi detectamos si alguno esta vacio y lo colocamos como null para no romper la inserción de datos
+                    //sumamos 1 porque asi obtenemos el valor i es 0 y no podemos inyectar nada en la posicion 0
+                    ps.setString(i + 1, fila[i].isEmpty() ? null : fila[i]);
+                }
+                ps.addBatch();
+            }
+            ps.executeBatch();
+            logger.info("Tabla '" + nombreHoja + "': " + filasLeidas.size() + " filas insertadas");
+        }
+    }
+    private static void generarWord(){
+        try(XWPFDocument document = new XWPFDocument();FileOutputStream archivo = new FileOutputStream("backend/archivos_creados/informe_BBDD.docx")){
+            // Lista de tablas creadas
+            List<String> lista = List.of("rol","usuario","espacio","categoria","proveedor","incidencia","comentario","historial_estado","historial_prioridad");
+            XWPFParagraph parrafo1 = document.createParagraph();
+            parrafo1.setAlignment(ParagraphAlignment.CENTER);
+            XWPFRun textoTitulo = parrafo1.createRun();
+            textoTitulo.setBold(true);
+            textoTitulo.setFontSize(24);
+            textoTitulo.setText("Informe de BBDD para acceso a datos");
+
+            XWPFParagraph parrafo2 = document.createParagraph();
+            parrafo2.setAlignment(ParagraphAlignment.CENTER);
+            XWPFRun tituloTabla = parrafo2.createRun();
+            tituloTabla.setFontSize(16);
+            tituloTabla.setText("\nTablas Generadas");
+
+            XWPFTable tabla = document.createTable(lista.size() + 1,1);
+            tabla.setWidth("100%");//En word web se ve mal, tiene que ser en la version de escritorio
+            tabla.setTableAlignment(TableRowAlign.CENTER);
+            for (int i = 1; i < tabla.getNumberOfRows(); i++) {
+                tabla.getRow(i).getCell(0).setText(lista.get(i-1).toUpperCase());
+            }
+            document.write(archivo);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }
