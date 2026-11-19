@@ -2,7 +2,6 @@
 
 import io
 from datetime import datetime
-from collections import Counter
 
 import matplotlib.pyplot as plt
 
@@ -54,7 +53,7 @@ def grafica_media_resolucion(incidencias):
 
     # Recorre solo las incidencias ya resueltas
     for inc in incidencias:
-        if inc["fecha_resolucion"] is None:
+        if inc["estado"] != "RESUELTA":
             continue
         categoria = inc["categoria"]
         # Convierte los strings de fecha a objetos datetime para operar
@@ -96,6 +95,9 @@ def grafica_media_resolucion(incidencias):
     ) as f:
         f.write(buf.getbuffer())
 
+    # Resetea la figura para no acumular estado con el siguiente gráfico
+    plt.clf()
+
 
 def grafico_quesos_estados(incidencias):
     """Genera un gráfico de quesos con la distribución por estado.
@@ -106,11 +108,15 @@ def grafico_quesos_estados(incidencias):
     Returns:
         None: Guarda el gráfico en analytics/graficos/.
     """
-    # Extrae y cuenta los estados
-    # Genera un dict con los totales: {'EN_CURSO': 2, 'ABIERTA': 2, ...}
-    conteo_estados = Counter(
-        incidencia['estado'] for incidencia in incidencias
-    )
+    # Recorre las incidencias y cuenta cuántas hay de cada estado
+    conteo_estados = {}
+    for incidencia in incidencias:
+        estado = incidencia['estado']
+        # Si el estado no está en el dict, lo inicializa a 0
+        if estado not in conteo_estados:
+            conteo_estados[estado] = 0
+        # Suma 1 al contador de ese estado
+        conteo_estados[estado] += 1
 
     # Preparar los datos para matplotlib
     etiquetas = []
@@ -131,9 +137,8 @@ def grafico_quesos_estados(incidencias):
 
         valores.append(cantidad)
 
-    # Configuracion de colores personalizados por hexadecimal
-    # Naranja para En Curso, Rojo para Abiertas, Verde para Resueltas
-    colores = ['#ff9999', '#ffcc99', '#99ff99']
+    # Colores: azul En Curso, morado Abiertas, verde Resueltas, gris Cerradas
+    colores = ['#4a90d9', '#9b59b6', '#27ae60', '#95a5a6']
 
     # Creación de la gráfica de queso
     plt.figure(figsize=(8, 6))
