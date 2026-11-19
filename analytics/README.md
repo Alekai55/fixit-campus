@@ -2,73 +2,92 @@
 
 Este proyecto es una herramienta desarrollada en Python para leer, procesar y visualizar gráficamente un registro de incidencias (averías, problemas informáticos, mantenimiento) almacenadas en un archivo JSON.
 
-El objetivo principal es transformar datos en crudo en gráficos visuales que ayuden a la toma de decisiones, permitiendo analizar los tiempos de respuesta, los costes asociados a diferentes proveedores y el volumen de incidencias por categoría y estado.
+El objetivo principal es transformar datos en crudo en gráficos visuales que ayuden a la toma de decisiones, permitiendo analizar los tiempos de respuesta, los costes asociados y el volumen de incidencias por categoría y estado.
 
 ---
 
 ## 📁 Archivos necesarios
 
-Antes de empezar, asegúrate de tener en la misma carpeta de tu proyecto los siguientes archivos:
+La carpeta `analytics/` contiene todos los archivos del módulo:
 
-1. El script de Python con el código (por ejemplo, `main.py`).
-2. El archivo con los datos llamado `En este caso lo genera el propio codigo de python`.
-3. Un archivo de texto llamado `requirements.txt` que debe contener exactamente estas dos líneas escritas en su interior:
-
-matplotlib
-flake8
+- `main.py` — Script principal que orquesta la carga, filtrado y generación de gráficos.
+- `cargardatos.py` — Carga las incidencias desde el JSON.
+- `filtro.py` — Filtra las incidencias según criterios.
+- `graficos.py` — Genera y guarda los gráficos.
+- `datos.json` — Datos de incidencias en formato JSON.
+- `requirements.txt` — Dependencias del proyecto.
 
 ---
 
 ## ⚙️ Requisitos previos
 
-Para poder ejecutar este proyecto en tu equipo, necesitas:
-- **Python 3.7 o superior**: Puedes descargarlo desde python.org.
-- **Pip**: El gestor de paquetes de Python (normalmente viene incluido al instalar Python).
+- **Python 3.7 o superior**: descargable desde python.org.
+- **Pip**: incluido al instalar Python.
 
 ---
 
 ## 🚀 Instalación y Configuración
 
-Abre la terminal en la carpeta de tu proyecto y sigue estos pasos para preparar tu entorno de trabajo:
+> ⚠️ **Importante:** el entorno virtual debe crearse **dentro de la carpeta `analytics/`**, no en la raíz del proyecto, para no contaminar el entorno general.
 
-**1. Crear un entorno virtual (Recomendado)**  
-Es una buena práctica para aislar las librerías de este proyecto de las de tu ordenador. Ejecuta:
+Abre la terminal, navega hasta `analytics/` y sigue estos pasos:
+
+```bash
+cd analytics
+```
+
+**1. Crear el entorno virtual**
 
 En Windows:
-python -m venv venv **Genera el entrono virtual**
-venv\Scripts\activate **Activa el entorno virtual**
+```bash
+python -m venv venv
+venv\Scripts\activate
+```
 
 En macOS/Linux:
-python3 -m venv venv **Genera el entrono virtual**
-source venv/bin/activate **Activa el entorno virtual**
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
 
-**2. Instalación de dependencias (requirements.txt)**  
-Para que el código funcione y cumpla con los estándares, Python necesita instalar las librerías que hemos definido en el archivo de texto. Ejecuta el siguiente comando:
+**2. Instalar dependencias**
 
+```bash
 pip install -r requirements.txt
+```
 
-Este comando descargará automáticamente **matplotlib** (para la generación de los gráficos) y **flake8** (para la revisión y calidad del código).
+Esto instalará **matplotlib** (para la generación de gráficos) y **flake8** (para la revisión de calidad del código).
 
 ---
 
 ## 📈 ¿Qué hace el código?
 
-Al ejecutar el script de Python, el sistema lee el listado de incidencias que crea `incidencias` y genera ventanas con gráficos distintos para analizar la situación:
+Al ejecutar el script principal, el sistema lee `datos.json` y genera los siguientes gráficos en `analytics/graficos/`:
 
-1. **Composición Categórica:** Muestra el volumen de incidencias separadas por categoría y estado.
-2. **Evolución Temporal:** Analiza el flujo dibujando una línea temporal de las incidencias reportadas.
-3. **Análisis Financiero:** Calcula y grafica el coste estimado agrupado por proveedor.
+1. **Incidencias por espacio:** barras con el volumen de incidencias abiertas por espacio.
+2. **Media de resolución:** barras con la media de días hasta resolución por categoría.
+3. **Distribución por estado:** gráfico de quesos con el reparto entre ABIERTA, EN_CURSO y RESUELTA.
 
 ---
 
 ## ▶️ Cómo ejecutar el proyecto
 
-Una vez instalado todo, asegúrate de tener tu entorno virtual activado y ejecuta el script principal en tu terminal (cambia `script.py` por el nombre real de tu archivo, en nuestro caso `main.py`):
+Con el entorno virtual activado y desde la **raíz del proyecto** (no desde `analytics/`):
 
-python script.py
+```bash
+python -m analytics.main
+```
 
+O bien desde dentro de `analytics/`:
 
-**Para revisar la calidad del código:**
-Si quieres detectar posibles errores de sintaxis o de formato con la herramienta que hemos instalado, ejecuta:
+```bash
+python main.py
+```
 
-flake8 main.py **Esto tendras que ejecutarlo desde el terminal de CMD, para abrirlo tendremos que entrar en el terminal de VSCode y en la parte superior derecha dar a la flecha al lado del símbolo +, despues iniciaremos la llamada `Command Prompt`**
+**Para revisar la calidad del código con flake8:**
+
+> Para ejecutar flake8 desde VSCode, abre el terminal integrado y selecciona `Command Prompt` (flecha junto al símbolo `+` en la esquina superior derecha del terminal).
+
+```bash
+python -m flake8 cargardatos.py filtro.py graficos.py main.py
+```

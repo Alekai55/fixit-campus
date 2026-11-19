@@ -34,8 +34,8 @@ def grafica_incidencias_por_espacio(incidencias):
         "analytics/graficos/grafico_incidencias.png", "wb"
     ) as f:
         f.write(buf.getbuffer())  # Vuelca el buffer al archivo en disco
-        
-    # plt es global y acumula estado; clf() lo resetea para el siguiente gráfico
+
+    # plt es global y acumula estado; clf() lo resetea para el siguiente
     plt.clf()
 
 
@@ -54,10 +54,10 @@ def grafica_media_resolucion(incidencias):
 
     # Recorre solo las incidencias ya resueltas
     for inc in incidencias:
-        if inc["fecha_resolucion"] == "null":
+        if inc["fecha_resolucion"] is None:
             continue
         categoria = inc["categoria"]
-        # Convierte los strings de fecha a objetos datetime para operar con ellos
+        # Convierte los strings de fecha a objetos datetime para operar
         creacion = datetime.strptime(
             inc["fecha_creacion"], "%Y-%m-%d"
         )
@@ -96,11 +96,21 @@ def grafica_media_resolucion(incidencias):
     ) as f:
         f.write(buf.getbuffer())
 
-def grafico_quesos_estados(incidencias):
 
-    #Extraer y contar los estados
-    # Esto genera un diccionario con los totales, ej: {'EN_CURSO': 2, 'ABIERTA': 2, 'RESUELTA': 1}
-    conteo_estados = Counter(incidencia['estado'] for incidencia in incidencias)
+def grafico_quesos_estados(incidencias):
+    """Genera un gráfico de quesos con la distribución por estado.
+
+    Args:
+        incidencias (list): Lista de incidencias a representar.
+
+    Returns:
+        None: Guarda el gráfico en analytics/graficos/.
+    """
+    # Extrae y cuenta los estados
+    # Genera un dict con los totales: {'EN_CURSO': 2, 'ABIERTA': 2, ...}
+    conteo_estados = Counter(
+        incidencia['estado'] for incidencia in incidencias
+    )
 
     # Preparar los datos para matplotlib
     etiquetas = []
@@ -114,8 +124,10 @@ def grafico_quesos_estados(incidencias):
             etiquetas.append("Abiertas")
         elif estado == "RESUELTA":
             etiquetas.append("Resueltas")
+        elif estado == "CERRADA":
+            etiquetas.append("Cerradas")
         else:
-            etiquetas.append(estado.capitalize())
+            etiquetas.append(estado)
 
         valores.append(cantidad)
 
@@ -131,18 +143,23 @@ def grafico_quesos_estados(incidencias):
         labels=etiquetas,
         colors=colores,
         autopct='%1.1f%%',  # Muestra el porcentaje con 1 decimal
-        startangle=90,  # Rota la gráfica para que el primer corte empiece arriba
+        startangle=90,  # Rota la gráfica para que empiece arriba
         shadow=True,  # Añade un efecto de sombra 3D
-        wedgeprops={'edgecolor': 'black'}  # Borde negro en los cortes para mayor contraste
+        wedgeprops={'edgecolor': 'black'}  # Borde negro para mayor contraste
     )
 
     # Esto asegura que la gráfica sea un círculo perfecto y no un óvalo
     plt.axis('equal')
 
-    plt.title('Distribución de Incidencias por Estado', pad=20, fontsize=14, fontweight='bold')
+    plt.title(
+        'Distribución de Incidencias por Estado',
+        pad=20,
+        fontsize=14,
+        fontweight='bold'
+    )
     buf = io.BytesIO()
     plt.savefig(buf, format="png")
     with open(
-            "analytics/graficos/grafico_queso_estados.png", "wb"
+        "analytics/graficos/grafico_queso_estados.png", "wb"
     ) as f:
         f.write(buf.getbuffer())
