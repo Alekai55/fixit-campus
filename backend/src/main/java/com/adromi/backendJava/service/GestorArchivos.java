@@ -169,14 +169,26 @@ public class GestorArchivos {
                     for (int c = 0; c < columnas.size(); c++) {
                         // Guardamos cada elemento de la fila en una variable llamada celda para operar con ella
                         Cell celda = fila.getCell(c);
-                        // Si la celda es nula la coloca como "", si no es nula la formatea a String con DataFormatter
-                        datos[c] = (celda == null) ? "" : formato.formatCellValue(celda);
+                        // Intentamos leer la celda. Si falla, lo anotamos en el log y dejamos el valor vacio
+                        // para no romper el array y poder seguir con el resto de columnas
+                        try {
+                            datos[c] = (celda == null) ? "" : formato.formatCellValue(celda);
+                        } catch (Exception e) {
+                            logger.warning("Error al leer celda columna " + c + " fila " + f + " hoja " + nombreHoja);
+                            datos[c] = "";
+                        }
                     }
                     leidas.add(datos);
                 }
 
                 logger.info("Hoja '" + nombreHoja + "': " + leidas.size() + " filas leidas");
-                insertarHoja(nombreHoja, columnas, leidas, logger);
+
+                // Si la inserción falla, paramos: las tablas siguientes pueden depender de esta
+                boolean ok = insertarHoja(nombreHoja, columnas, leidas, logger);
+                if (!ok) {
+                    logger.severe("Inserción detenida en '" + nombreHoja + "' — las tablas siguientes pueden depender de esta.");
+                    break;
+                }
                 hojasProcesadas++;
             }
         }
@@ -186,7 +198,9 @@ public class GestorArchivos {
         return resumen;
     }
 
-    private static void insertarHoja(String nombreHoja, List<String> cols, List<String[]> filasLeidas, Logger logger) throws SQLException, IOException {
+    // Devuelve true si la inserción fue bien, false si falló.
+    // leerExcel usa este resultado para parar si una tabla falla.
+    private static boolean insertarHoja(String nombreHoja, List<String> cols, List<String[]> filasLeidas, Logger logger) throws IOException {
         // cols.size() - 1 porque si no se pondria 1 de mas al agregar el ? final.
         // Sin restar 1, terminaria en ", ?" y daria fallo de sintaxis SQL.
         String sql = "INSERT INTO " + nombreHoja + " (" + String.join(", ", cols) + ") VALUES (" + "?, ".repeat(cols.size() - 1) + "?)";
@@ -202,8 +216,20 @@ public class GestorArchivos {
                 }
                 ps.addBatch();
             }
-            ps.executeBatch();
-            logger.info("Tabla '" + nombreHoja + "': " + filasLeidas.size() + " filas insertadas");
+            // Intentamos ejecutar todas las inserciones de golpe.
+            // Si algo falla (clave foranea, dato invalido...), lo registramos en el log como error grave.
+            try {
+                ps.executeBatch();
+                logger.info("Tabla '" + nombreHoja + "': " + filasLeidas.size() + " filas insertadas");
+                return true;
+            } catch (SQLException e) {
+                logger.severe("Error al insertar en tabla '" + nombreHoja + "': " + e.getMessage());
+                return false;
+            }
+        } catch (SQLException e) {
+            // Fallo al abrir la conexion o preparar el statement
+            logger.severe("Error de conexion al insertar en tabla '" + nombreHoja + "': " + e.getMessage());
+            return false;
         }
     }
 
@@ -230,6 +256,10 @@ public class GestorArchivos {
             }
 
             document.write(archivo);
+        } catch (IOException e) {
+            // Si falla al crear o escribir el archivo Word, lo registramos en el log
+            logger.severe("Error al generar el Word: " + e.getMessage());
+            return "Error al generar el Word";
         }
 
         String resumen = "Word generado correctamente";
