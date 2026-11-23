@@ -152,6 +152,10 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+# Credenciales de la BBDD (nunca subir al repositorio)
+db.properties
+**/db.properties
+
 # Logs generados por la aplicación
 *.log
 archivos-log/
@@ -163,4 +167,6 @@ archivos_creados/
 
 # Archivos y carpetas generados específicamente por la lógica de analytics Python
 graficos/
+
+
 
