@@ -14,7 +14,7 @@ import java.util.Properties;
 public class Conexion {
 
     // Ruta al archivo de propiedades donde estan las credenciales de la BBDD
-    private static final String RUTA_PROPERTIES = "src/main/resources/db.properties";
+    private static final String RUTA_PROPERTIES = "backend/src/main/resources/db.properties";
 
     private Conexion() {} //no se instancia, solo se usa el metodo estatico
 
