@@ -38,5 +38,13 @@
             <artifactId>mysql-connector-j</artifactId>
             <version>26.10.0</version>
         </dependency>
+        <!-- Log4j: Apache POI lo usa internamente para sus logs.
+             Sin esta dependencia, al ejecutar aparece un aviso de que no encuentra
+             un proveedor de logging. No afecta al funcionamiento, pero ensucia la consola. -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.24.1</version>
+        </dependency>
     </dependencies>
 </project>
