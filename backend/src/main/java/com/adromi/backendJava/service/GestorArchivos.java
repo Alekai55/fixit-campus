@@ -208,7 +208,7 @@ public class GestorArchivos {
     private static boolean insertarHoja(String nombreHoja, List<String> cols, List<String[]> filasLeidas, Logger logger) throws IOException {
         // cols.size() - 1 porque si no se pondria 1 de mas al agregar el ? final.
         // Sin restar 1, terminaria en ", ?" y daria fallo de sintaxis SQL.
-        String sql = "INSERT INTO " + nombreHoja + " (" + String.join(", ", cols) + ") VALUES (" + "?, ".repeat(cols.size() - 1) + "?)";
+        String sql = "INSERT IGNORE INTO " + nombreHoja + " (" + String.join(", ", cols) + ") VALUES (" + "?, ".repeat(cols.size() - 1) + "?)";
 
         // Conexion.getConnection() centraliza las credenciales; aqui solo pedimos la conexion
         try (Connection con = Conexion.getConnection();
