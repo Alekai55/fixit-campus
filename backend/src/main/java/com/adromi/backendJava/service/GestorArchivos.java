@@ -33,6 +33,11 @@ public class GestorArchivos {
     private static final List<String> historial_estado    = new ArrayList<>(List.of("estado_anterior", "estado_nuevo", "fecha_cambio", "observaciones", "id_incidencia", "id_usuario"));
     private static final List<String> historial_prioridad = new ArrayList<>(List.of("prioridad_anterior", "prioridad_nueva", "fecha_cambio", "motivo", "id_incidencia", "id_usuario"));
 
+    // Nombres de las tablas, en orden de insercion (rol antes que usuario por las claves foraneas).
+    // Se usa en generarExcel, leerExcel y generarWord.
+    private static final List<String> nombreTablas = List.of("rol", "usuario", "espacio", "categoria", "proveedor",
+            "incidencia", "comentario", "historial_estado", "historial_prioridad");
+
     private GestorArchivos() {} // No se instancia, solo se usan los metodos estaticos
 
     public static String generarExcel(Logger logger) throws IOException {
@@ -49,14 +54,10 @@ public class GestorArchivos {
             logger.severe("Error en generarExcel: no se pudo crear la carpeta de destino");
         }
 
-        List<String> hojas = new ArrayList<>(List.of(
-                "rol", "usuario", "espacio", "categoria", "proveedor",
-                "incidencia", "comentario", "historial_estado", "historial_prioridad"));
-
         try (XSSFWorkbook libro = new XSSFWorkbook();
              FileOutputStream archivo_excel = new FileOutputStream("backend/archivos_creados/excel_BDD.xlsx")) {
 
-            for (String nombreHoja : hojas) {
+            for (String nombreHoja : nombreTablas) {
                 Sheet hoja = libro.createSheet(nombreHoja);
                 Row cabecera = hoja.createRow(0);
 
@@ -130,10 +131,14 @@ public class GestorArchivos {
         try (FileInputStream archivo = new FileInputStream("backend/archivos_creados/excel_BDD.xlsx");
              XSSFWorkbook libro = new XSSFWorkbook(archivo)) {
 
-            // Bucle de HOJAS: una vuelta por cada hoja del libro
-            for (int i = 0; i < libro.getNumberOfSheets(); i++) {
-                Sheet hoja = libro.getSheetAt(i);
-                String nombreHoja = hoja.getSheetName();
+            // Bucle de HOJAS: recorremos la lista de tablas (en orden correcto) y pedimos cada hoja por su nombre
+            for (String nombreHoja : nombreTablas) {
+                Sheet hoja = libro.getSheet(nombreHoja);
+                // getSheet devuelve null si esa hoja no existe en el Excel
+                if (hoja == null) {
+                    logger.warning("Falta la hoja: " + nombreHoja);
+                    continue;
+                }
 
                 // Segun la hoja, elegimos que lista de cabeceras corresponde.
                 // El break es obligatorio: sin el, Java sigue ejecutando los case de abajo.
@@ -237,11 +242,10 @@ public class GestorArchivos {
         logger.info("\n--- generarWord ---");
 
         try (XWPFDocument document = new XWPFDocument();
-             FileOutputStream archivo = new FileOutputStream("backend/archivos_creados/informe_BBDD.docx")) {
+             FileOutputStream archivo = new FileOutputStream("backend/archivos_creados/informe_BBDD.docx");
+             Connection con = Conexion.getConnection()) {
 
-            List<String> lista = List.of("rol", "usuario", "espacio", "categoria", "proveedor",
-                    "incidencia", "comentario", "historial_estado", "historial_prioridad");
-
+            // Título
             XWPFParagraph parrafo1 = document.createParagraph();
             parrafo1.setAlignment(ParagraphAlignment.CENTER);
             XWPFRun textoTitulo = parrafo1.createRun();
@@ -249,15 +253,66 @@ public class GestorArchivos {
             textoTitulo.setFontSize(24);
             textoTitulo.setText("Informe de BBDD para acceso a datos");
 
-            XWPFTable tabla = document.createTable(lista.size() + 1, 1);
+            // Subtítulo
+            XWPFParagraph parrafo2 = document.createParagraph();
+            parrafo2.setAlignment(ParagraphAlignment.CENTER);
+            XWPFRun textoSubtitulo = parrafo2.createRun();
+            textoSubtitulo.setFontSize(14);
+            textoSubtitulo.setText("FixIt Campus - " + nombreTablas.size() + " tablas");
+
+            // Tabla: 1 fila de cabecera + 1 fila por tabla, 3 columnas
+            XWPFTable tabla = document.createTable(nombreTablas.size() + 1, 3);
             tabla.setWidth("100%");
+
+            // Cabecera (fila 0)
+            XWPFRun cab1 = tabla.getRow(0).getCell(0).getParagraphs().get(0).createRun();
+            cab1.setBold(true);
+            cab1.setText("TABLA");
+            XWPFRun cab2 = tabla.getRow(0).getCell(1).getParagraphs().get(0).createRun();
+            cab2.setBold(true);
+            cab2.setText("REGISTROS");
+            XWPFRun cab3 = tabla.getRow(0).getCell(2).getParagraphs().get(0).createRun();
+            cab3.setBold(true);
+            cab3.setText("COLUMNAS");
+
+            // Filas de datos
             for (int i = 1; i < tabla.getNumberOfRows(); i++) {
-                tabla.getRow(i).getCell(0).setText(lista.get(i - 1).toUpperCase());
+                String nombre = nombreTablas.get(i - 1);
+
+                // Mismo switch que en generarExcel para elegir la lista de columnas
+                switch (nombre) {
+                    case "rol":                 columnas = rol;                 break;
+                    case "usuario":             columnas = usuario;             break;
+                    case "espacio":             columnas = espacio;             break;
+                    case "categoria":           columnas = categoria;           break;
+                    case "proveedor":           columnas = proveedor;           break;
+                    case "incidencia":          columnas = incidencia;          break;
+                    case "comentario":          columnas = comentario;          break;
+                    case "historial_estado":    columnas = historial_estado;    break;
+                    case "historial_prioridad": columnas = historial_prioridad; break;
+                }
+
+                // Celda 0: nombre de la tabla en negrita
+                XWPFRun celdaNombre = tabla.getRow(i).getCell(0).getParagraphs().get(0).createRun();
+                celdaNombre.setBold(true);
+                celdaNombre.setText(nombre.toUpperCase());
+
+                // Celda 1: número de registros, con la conexión de Conexion.java
+                try (Statement st = con.createStatement();
+                     ResultSet rs = st.executeQuery("SELECT COUNT(*) FROM " + nombre)) {
+                    rs.next();
+                    tabla.getRow(i).getCell(1).setText(rs.getString(1));
+                } catch (SQLException e) {
+                    logger.warning("No se pudo contar la tabla " + nombre + ": " + e.getMessage());
+                }
+
+                // Celda 2: columnas de la tabla
+                tabla.getRow(i).getCell(2).setText(String.join(", ", columnas));
             }
 
             document.write(archivo);
-        } catch (IOException e) {
-            // Si falla al crear o escribir el archivo Word, lo registramos en el log
+        } catch (IOException | SQLException e) {
+            // Si falla al crear o escribir el archivo Word, o al conectar con la BBDD, lo registramos en el log
             logger.severe("Error al generar el Word: " + e.getMessage());
             return "Error al generar el Word";
         }
