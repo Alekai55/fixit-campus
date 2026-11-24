@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 
 // Agrupa las operaciones de ficheros de la aplicación: generación del Excel con los datos de la BBDD,
 // lectura del Excel e inserción en la BBDD, y generación del informe Word.
-// El Logger se recibe como parámetro en cada método: lo crea quien lo llame (Main) usando GestorLog.
+// El Logger se recibe como parámetro en cada método.
 // Cada método devuelve un String con el resumen del resultado, para poder usarlo como Callable<String> desde task.
 public class GestorArchivos {
 
@@ -33,7 +33,7 @@ public class GestorArchivos {
     private static final List<String> historial_estado    = new ArrayList<>(List.of("id_historial_estado", "estado_anterior", "estado_nuevo", "fecha_cambio", "observaciones", "id_incidencia", "id_usuario"));
     private static final List<String> historial_prioridad = new ArrayList<>(List.of("id_historial_prioridad", "prioridad_anterior", "prioridad_nueva", "fecha_cambio", "motivo", "id_incidencia", "id_usuario"));
 
-    // Nombres de las tablas, en orden de insercion (rol antes que usuario por las claves foraneas).
+    // Nombres de las tablas.
     // Se usa en generarExcel, leerExcel y generarWord.
     private static final List<String> nombreTablas = List.of("rol", "usuario", "espacio", "categoria", "proveedor",
             "incidencia", "comentario", "historial_estado", "historial_prioridad");
@@ -48,7 +48,6 @@ public class GestorArchivos {
         logger.info("\n--- generarExcel ---");
 
         // Si la carpeta no existe y no se puede crear (permisos, ruta invalida), se registra como error grave.
-        // En condiciones normales mkdirs() siempre devuelve true, pero si falla aqui el Excel no se podria generar.
         File carpetas = new File("backend/archivos_creados");
         if (!carpetas.exists() && !carpetas.mkdirs()) {
             logger.severe("Error en generarExcel: no se pudo crear la carpeta de destino");
@@ -85,8 +84,8 @@ public class GestorArchivos {
                 }
                 logger.info("Hoja '" + nombreHoja + "' creada con " + columnas.size() + " columnas");
 
-                // ---------- RELLENAR LA HOJA CON LOS DATOS ----------
-                // Este mismo bloque se ejecuta para TODAS las hojas: lo unico que cambia en cada vuelta
+                
+                // Este mismo bloque se ejecuta para todas las hojas: lo unico que cambia en cada vuelta
                 // es la lista 'filas', que el switch ha pedido al metodo de Datos de esa hoja.
                 // Si filas es null, la hoja no tiene datos que cargar y se queda solo con las cabeceras.
                 if (filas != null) {
@@ -224,8 +223,13 @@ public class GestorArchivos {
             // Intentamos ejecutar todas las inserciones de golpe.
             // Si algo falla (clave foranea, dato invalido...), lo registramos en el log como error grave.
             try {
-                ps.executeBatch();
-                logger.info("Tabla '" + nombreHoja + "': " + filasLeidas.size() + " filas insertadas");
+                // executeBatch devuelve un array: 1 si la fila se insertó, 0 si ya existía (INSERT IGNORE la salta)
+                int[] resultados = ps.executeBatch();
+                int insertadas = 0;
+                for (int r : resultados) {
+                    if (r > 0) insertadas++;
+                }
+                logger.info("Tabla '" + nombreHoja + "': " + insertadas + " filas insertadas, " + (filasLeidas.size() - insertadas) + " ya existian");
                 return true;
             } catch (SQLException e) {
                 logger.severe("Error al insertar en tabla '" + nombreHoja + "': " + e.getMessage());
