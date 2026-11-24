@@ -23,15 +23,15 @@ public class GestorArchivos {
     private static List<String> columnas;
     private static List<String[]> filas;
 
-    private static final List<String> rol                 = new ArrayList<>(List.of("nombre"));
-    private static final List<String> usuario             = new ArrayList<>(List.of("nombre", "apellidos", "email", "contrasena", "id_rol"));
-    private static final List<String> espacio             = new ArrayList<>(List.of("edificio", "planta", "nombre_espacio", "tipo", "en_uso"));
-    private static final List<String> categoria           = new ArrayList<>(List.of("nombre"));
-    private static final List<String> proveedor           = new ArrayList<>(List.of("razon_social", "nif", "especialidad", "telefono", "email", "precio_hora"));
-    private static final List<String> incidencia          = new ArrayList<>(List.of("titulo", "descripcion", "foto_url", "prioridad", "estado", "fecha_creacion", "fecha_objetivo", "fecha_resolucion", "id_espacio", "id_categoria", "id_usuario", "id_usuario_tecnico", "id_proveedor"));
-    private static final List<String> comentario          = new ArrayList<>(List.of("texto", "fecha_creacion", "id_incidencia", "id_usuario"));
-    private static final List<String> historial_estado    = new ArrayList<>(List.of("estado_anterior", "estado_nuevo", "fecha_cambio", "observaciones", "id_incidencia", "id_usuario"));
-    private static final List<String> historial_prioridad = new ArrayList<>(List.of("prioridad_anterior", "prioridad_nueva", "fecha_cambio", "motivo", "id_incidencia", "id_usuario"));
+    private static final List<String> rol                 = new ArrayList<>(List.of("id_rol", "nombre"));
+    private static final List<String> usuario             = new ArrayList<>(List.of("id_usuario", "nombre", "apellidos", "email", "contrasena", "id_rol"));
+    private static final List<String> espacio             = new ArrayList<>(List.of("id_espacio", "edificio", "planta", "nombre_espacio", "tipo", "en_uso"));
+    private static final List<String> categoria           = new ArrayList<>(List.of("id_categoria", "nombre"));
+    private static final List<String> proveedor           = new ArrayList<>(List.of("id_proveedor", "razon_social", "nif", "especialidad", "telefono", "email", "precio_hora"));
+    private static final List<String> incidencia          = new ArrayList<>(List.of("id_incidencia", "titulo", "descripcion", "foto_url", "prioridad", "estado", "fecha_creacion", "fecha_objetivo", "fecha_resolucion", "id_espacio", "id_categoria", "id_usuario", "id_usuario_tecnico", "id_proveedor"));
+    private static final List<String> comentario          = new ArrayList<>(List.of("id_comentario", "texto", "fecha_creacion", "id_incidencia", "id_usuario"));
+    private static final List<String> historial_estado    = new ArrayList<>(List.of("id_historial_estado", "estado_anterior", "estado_nuevo", "fecha_cambio", "observaciones", "id_incidencia", "id_usuario"));
+    private static final List<String> historial_prioridad = new ArrayList<>(List.of("id_historial_prioridad", "prioridad_anterior", "prioridad_nueva", "fecha_cambio", "motivo", "id_incidencia", "id_usuario"));
 
     // Nombres de las tablas, en orden de insercion (rol antes que usuario por las claves foraneas).
     // Se usa en generarExcel, leerExcel y generarWord.
