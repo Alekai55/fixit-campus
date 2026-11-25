@@ -25,8 +25,8 @@ public class GestorTareas {
 
     public void ejecutar() throws InterruptedException, ExecutionException, IOException {
 
-        // Pool de 4 hilos: Executors simplifica la creacion de ThreadPoolExecutor
-        ExecutorService executor = Executors.newFixedThreadPool(4);
+        // Como ExecutorService es autoclosable, se puede usar try-with-resources para cerrar el pool automáticamente al salir del bloque.
+        try (ExecutorService executor = Executors.newFixedThreadPool(4)) {
 
         
         // FASE 1  lanza los 4 hilos en paralelo
@@ -97,7 +97,6 @@ public class GestorTareas {
 
         logger.info("Tareas completadas: " + tareasCompletadas.get() + "/6");
 
-        // El pool deja de aceptar tareas nuevas y libera los hilos al terminar
-        executor.shutdown();
+        } // fin try-with-resources: close() llama a shutdown() automaticamente
     }
 }
