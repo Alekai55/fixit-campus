@@ -38,7 +38,7 @@ Con un único `Main` el arranque es uno solo, los dos loggers se crean en el pun
 
 ## Credenciales de la BBDD
 
-Las credenciales no están en el código. Se leen del archivo `src/main/resources/db.properties`:
+Las credenciales no están en el código y el archivo **no está en el repositorio** (está en el `.gitignore`). Hay que crearlo manualmente en `src/main/resources/db.properties` con este contenido:
 
 ```properties
 # Conexion MySQL (Local)
@@ -47,7 +47,7 @@ mysql.username=root
 mysql.password=
 ```
 
-Cambiar los valores según el entorno. **Este archivo no debe subirse al repositorio.**
+Ajustar los valores según el entorno. Sin este archivo el programa no arranca.
 
 ---
 
